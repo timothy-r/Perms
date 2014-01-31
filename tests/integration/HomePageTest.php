@@ -5,7 +5,7 @@ use Silex\WebTestCase;
 class HomePageTest extends WebTestCase
 {
     
-    protected function createApplication()
+    public function createApplication()
     {
         return require __DIR__ . '/../../web/index.php';
     }
