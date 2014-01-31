@@ -2,6 +2,11 @@
     "require": {
         "silex/silex": "~1.1"
     },
+    "require-dev": {
+        "symfony/browser-kit": ">=2.3,<2.4-dev",
+        "phpunit/phpunit": "3.9.*@dev"
+    },
+    "minimum-stability": "dev",
 	"autoload": {
         "psr-0": {
             "Ace": "src/"
