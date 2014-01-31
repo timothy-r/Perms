@@ -11,4 +11,12 @@ $app->get('/', function(Application $app) {
     return $app->json($data);
 });
 
+$app->get('/user/{user_id}/{type}/{object_id}', function(Application $app, $user_id, $type, $object_id) {
+    $perms = new StdClass;
+    $subject = ['user' => $user_id];
+    $object = ['type' => $type, 'id' => $object_id];
+    $data = ['perms' => $perms, 'subject' => $subject, 'object' => $object]; 
+    return $app->json($data);
+});
+
 $app->run();
