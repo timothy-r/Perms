@@ -11,10 +11,10 @@ $app->get('/', function(Application $app) {
     return $app->json($data);
 });
 
-$app->get('/user/{user_id}/{type}/{object_id}', function(Application $app, $user_id, $type, $object_id) {
+$app->get('/{subject_type}/{subject_id}/{object_type}/{object_id}', function(Application $app, $subject_type, $subject_id, $object_type, $object_id) {
     $perms = new StdClass;
-    $subject = ['user' => $user_id];
-    $object = ['type' => $type, 'id' => $object_id];
+    $subject = ['type' => $subject_type, 'id' => $subject_id];
+    $object = ['type' => $object_type, 'id' => $object_id];
     $data = ['perms' => $perms, 'subject' => $subject, 'object' => $object]; 
     return $app->json($data);
 });
