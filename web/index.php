@@ -7,7 +7,8 @@ $app = new Application;
 $app['debug'] = true;
 
 $app->get('/', function(Application $app) { 
-    return '{"name" : "perms application"}';
+    $data = ['name' => 'perms application'];
+    return $app->json($data);
 });
 
 $app->run();
