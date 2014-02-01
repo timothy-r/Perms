@@ -4,9 +4,12 @@ class Subject implements SubjectInterface
 {
     private $id;
 
-    public function __construct($id)
+    private $type;
+
+    public function __construct($id, $type)
     {
         $this->id = $id;
+        $this->type = $type;
     }
 
     public function getId()
@@ -16,5 +19,6 @@ class Subject implements SubjectInterface
 
     public function getType()
     {
+        return $this->type;
     }
 }
