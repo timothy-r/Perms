@@ -1,6 +1,13 @@
 <?php namespace Ace\Perm;
 
-class Subject
+class Subject implements SubjectInterface
 {
 
+    public function getId()
+    {
+    }
+
+    public function getType()
+    {
+    }
 }
