@@ -16,7 +16,8 @@ $app->get('/{subject_type}/{subject_id}/{object_type}/{object_id}', function(App
     $subject = ['type' => $subject_type, 'id' => $subject_id];
     $object = ['type' => $object_type, 'id' => $object_id];
 
-    // obtain perms from storage
+    // obtain perms from storage, keyed by subject & object
+    // $perms = $storage->getPerms($subject, $object);
     $perms = new StdClass;
     $data = ['perms' => $perms, 'subject' => $subject, 'object' => $object]; 
     return $app->json($data);
