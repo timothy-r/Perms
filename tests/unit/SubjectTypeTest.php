@@ -1,15 +1,15 @@
 <?php
 
-use Ace\Perm\Subject;
+use Ace\Perm\SubjectType;
 use Ace\Test\UnitTest;
 
-class SubjectTest extends UnitTest
+class SubjectTypeTest extends UnitTest
 {
     public function testGetIdentity()
     {
         $id = '1';
         $type = 'user';
-        $subject = new Subject($id, $type);
+        $subject = new SubjectType($id, $type);
         $actual = $subject->getId();
         $this->assertSame($id, $actual);
     }
@@ -18,7 +18,7 @@ class SubjectTest extends UnitTest
     {
         $id = '1';
         $type = 'user';
-        $subject = new Subject($id, $type);
+        $subject = new SubjectType($id, $type);
         $actual = $subject->getType();
         $this->assertSame($type, $actual);
     }

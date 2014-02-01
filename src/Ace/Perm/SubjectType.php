@@ -1,6 +1,6 @@
 <?php namespace Ace\Perm;
 
-class Subject implements SubjectInterface
+class SubjectType implements SubjectInterface
 {
     private $id;
 
