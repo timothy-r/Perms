@@ -27,7 +27,4 @@ function(Application $app, $subject_type, $subject_id, $object_type, $object_id)
     return $app->json($data);
 });
 
-$app->run();
-
 return $app;
-
