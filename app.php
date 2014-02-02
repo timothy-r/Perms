@@ -4,10 +4,17 @@ use Ace\Perm\Store;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$store = new Store;
-
 $app = new Application;
 $app['debug'] = true;
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), [
+    'db.options' => [
+        'driver'   => 'pdo_sqlite',
+        'path'     => __DIR__.'/app.db',
+    ],
+]);
+
+$store = new Store($app['db']);
 
 $app->get('/', function(Application $app) { 
     $data = ['name' => 'perms application'];
