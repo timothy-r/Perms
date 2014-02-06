@@ -23,4 +23,9 @@ class Perm
     {
         return isset($this->values[$name]);
     }
+
+    public function allPerms()
+    {
+        return array_keys($this->values);
+    }
 }

@@ -29,4 +29,12 @@ class PermTest extends UnitTest
         $this->assertFalse($actual);
     }
 
+    public function testAllPerms()
+    {
+        $perms = ['read', 'write'];
+        $perm = new Perm($this->mock_subject, $this->mock_object, $perms);
+        $actual = $perm->allPerms();
+        $this->assertSame($perms, $actual);
+    }
+
 }
