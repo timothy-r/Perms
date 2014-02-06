@@ -20,7 +20,7 @@ class Store implements StoreInterface
         $sql = "SELECT * FROM perm WHERE object_id = ? AND object_type = ? AND subject_id = ? AND subject_type = ?";
         $options = [$subject->getId(), $subject->getType(), $object->getId(), $object->getType()];
         $result = $this->db->fetchAssoc($sql, $options);
-        $perms = [];
+        $perms = explode(',', $result['value']);
         $perm = new Perm($subject, $object, $perms);
         return $perm;
     }

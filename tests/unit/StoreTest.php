@@ -31,5 +31,6 @@ class StoreTest extends UnitTest
 
         $perm = $store->get($this->mock_subject, $this->mock_object);
         $this->assertInstanceOf('Ace\Perm\Perm', $perm);
+        $this->assertSame(['read'], $perm->allPerms());
     }
 }
