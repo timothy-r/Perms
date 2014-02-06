@@ -16,11 +16,11 @@ class StoreTest extends UnitTest
         $object_type = 'user';
         $subject_id = 'x';
         $subject_type = 'thread';
+        $perm_value = 'read';
 
         $expected_sql = 
             "SELECT * FROM perm WHERE subject_id = ? AND subject_type = ? AND object_id = ? AND object_type = ?";
         
-        $perm_value = 'read';
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $subject_id, $subject_type, $object_id, $object_type, $perm_value);
         
@@ -37,7 +37,15 @@ class StoreTest extends UnitTest
 
     public function testSetAddsAPermObject()
     {
+        $object_id = '1s';
+        $object_type = 'user';
+        $subject_id = 'x';
+        $subject_type = 'thread';
+        $perm_value = 'write,admin';
 
+        $expected_sql = 'INSERT INTO perm (subject_id, subject_type, object_id, object_type, value) values(?,?,?,?,?)';
+        $this->givenAMockDb();
+        $this->whenDbExpects($expected_sql, $subject_id, $subject_type, $object_id, $object_type, $perm_value);
     }
 
     protected function givenAMockDb()
@@ -51,5 +59,12 @@ class StoreTest extends UnitTest
             ->method('fetchAssoc')
             ->with($expected_sql)
             ->will($this->returnValue(['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]));
+    }
+
+    protected function whenDbExpects($expected_sql, $subject_id, $subject_type, $object_id, $object_type, $perm)
+    {
+        $this->mock_db->expects($this->once())
+            ->method('')
+            ->with($expected_sql, $this->returnValue(['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]));
     }
 }
