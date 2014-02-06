@@ -49,7 +49,7 @@ function(Application $app, $subject_type, $subject_id, $object_type, $object_id)
 
     // get request body - expect json - and convert to a perms array
     $perms = [];
-    $perm = $store->set($subject, $object, $perms);
+    $perm = $store->add($subject, $object, $perms);
     // return 201 with no body?
     //return $app->json($data);
 });
