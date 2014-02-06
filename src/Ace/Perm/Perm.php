@@ -1,33 +1,26 @@
 <?php namespace Ace\Perm;
 
-use ArrayAccess;
+use Ace\Perm\SubjectInterface;
+use Ace\Perm\ObjectInterface;
 
-class Perm implements ArrayAccess
+class Perm
 {
+    private $subject;
+    private $object;
     private $values = [];
 
-    public function __construct(array $values = [])
+    public function __construct(SubjectInterface $subject, ObjectInterface $object, array $values = [])
     {
+        $this->subject = $subject;
+        $this->object = $object;
+
         foreach($values as $value){
             $this->values[$value] = true;
         }
     }
-
-    public function offsetExists($offset)
+    
+    public function hasPerm($name)
     {
-        return isset($this->values[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {   
-        return isset($this->values[$offset]) ? $this->values[$offset] : null;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-    }
-
-    public function offsetUnset($offset)
-    {
+        return isset($this->values[$name]);
     }
 }

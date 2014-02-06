@@ -2,34 +2,30 @@
 
 use Ace\Perm\Perm;
 use Ace\Test\UnitTest;
+require_once(__DIR__.'/../PermMockTrait.php');
 
 class PermTest extends UnitTest
 {
-    public function testOffsetGet()
+    use PermMockTrait;
+    
+    public function setUp()
     {
-        $perm = new Perm(['read', 'write']);
-        $actual = $perm['read'];
+        parent::setUp();
+        $this->givenAMockSubject();
+        $this->givenAMockObject();
+    }
+
+    public function testHasPermReturnsTrueForSetPerms()
+    {
+        $perm = new Perm($this->mock_subject, $this->mock_object, ['read', 'write']);
+        $actual = $perm->hasPerm('read');
         $this->assertTrue($actual);
     }
 
-    public function testOffsetGetReturnsNullForMissingItems()
+    public function testHasPermReturnsFalseForUnsetPerms()
     {
-        $perm = new Perm(['read', 'write']);
-        $actual = $perm['delete'];
-        $this->assertNull($actual);
-    }
-
-    public function testOffsetExists()
-    {
-        $perm = new Perm(['read', 'write']);
-        $actual = isset($perm['read']);
-        $this->assertTrue($actual);
-    }
-
-    public function testOffsetExistsReturnsFalseForMissingKeys()
-    { 
-        $perm = new Perm(['read', 'write']);
-        $actual = isset($perm['admin']);
+        $perm = new Perm($this->mock_subject, $this->mock_object, ['read', 'write']);
+        $actual = $perm->hasPerm('delete');
         $this->assertFalse($actual);
     }
 
