@@ -12,7 +12,7 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver'   => 'pdo_sqlite',
-        'path'     => __DIR__.'/app.db',
+        'path'     => __DIR__.'/data/app.db',
     ],
 ]);
 
