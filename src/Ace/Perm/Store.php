@@ -17,7 +17,7 @@ class Store implements StoreInterface
 
     public function get(SubjectInterface $subject, ObjectInterface $object)
     {
-        $sql = "SELECT * FROM perm WHERE object_id = ? AND object_type = ? AND subject_id = ? AND subject_type = ?";
+        $sql = "SELECT * FROM perm WHERE subject_id = ? AND subject_type = ? AND object_id = ? AND object_type = ?";
         $options = [$subject->getId(), $subject->getType(), $object->getId(), $object->getType()];
         $result = $this->db->fetchAssoc($sql, $options);
         $perms = explode(',', $result['value']);

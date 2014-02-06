@@ -18,7 +18,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), [
 
 $store = new Store($app['db']);
 
-$app->get('/', function(Application $app) { 
+$app->get('/', 
+function(Application $app) { 
     $data = ['name' => 'perms application'];
     return $app->json($data);
 });
@@ -31,8 +32,10 @@ function(Application $app, $subject_type, $subject_id, $object_type, $object_id)
 
     // obtain perms from storage, keyed by subject & object
     $perm = $store->get($subject, $object);
-    //$perms = new StdClass;
-    $data = ['perms' => $perm, 'subject' => $subject, 'object' => $object]; 
+    $data = [
+        'perms' => $perm->allPerms(), 
+        'subject' => ['id' => $subject->getId(), 'type' => $subject->getType()], 
+        'object' => ['id' => $object->getId(), 'type' => $object->getType()]]; 
     return $app->json($data);
 });
 
