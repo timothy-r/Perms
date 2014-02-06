@@ -39,4 +39,19 @@ function(Application $app, $subject_type, $subject_id, $object_type, $object_id)
     return $app->json($data);
 });
 
+$app->put('/{subject_type}/{subject_id}/{object_type}/{object_id}', 
+function(Application $app, $subject_type, $subject_id, $object_type, $object_id) use ($store) {
+    
+    // compare ETag of request against the ETag for this resource
+    // reject any incoming requests that contain stale ETags
+    $subject = new SubjectType($subject_id, $subject_type);
+    $object = new ObjectType($object_id, $object_type);
+
+    // get request body - expect json - and convert to a perms array
+    $perms = [];
+    $perm = $store->set($subject, $object, $perms);
+    // return 201 with no body?
+    //return $app->json($data);
+});
+
 return $app;
