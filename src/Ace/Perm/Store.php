@@ -24,4 +24,13 @@ class Store implements StoreInterface
         $perm = new Perm($subject, $object, $perms);
         return $perm;
     }
+
+    public function add(SubjectInterface $subject, ObjectInterface $object, array $value)
+    {
+        $table = 'perm';
+        $options = ['subject_id' => $subject->getId(), 'subject_type' => $subject->getType(), 'object_id' => $object->getId(), 'object_type' => $object->getType(), 'value' => implode(',', $value)];
+        $types = ['text', 'text', 'text', 'text', 'text'];
+        $result = $this->db->insert($table, $options, $types);
+        return true;
+    }
 }

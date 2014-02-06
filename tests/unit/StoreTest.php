@@ -35,17 +35,24 @@ class StoreTest extends UnitTest
         $this->assertSame([$perm_value], $perm->allPerms());
     }
 
-    public function testSetAddsAPermObject()
+    public function testAddAddsAPermObject()
     {
         $object_id = '1s';
         $object_type = 'user';
         $subject_id = 'x';
         $subject_type = 'thread';
-        $perm_value = 'write,admin';
+        $perm_value = ['write','admin'];
 
-        $expected_sql = 'INSERT INTO perm (subject_id, subject_type, object_id, object_type, value) values(?,?,?,?,?)';
+        $table = 'perm';
         $this->givenAMockDb();
-        $this->whenDbExpects($expected_sql, $subject_id, $subject_type, $object_id, $object_type, $perm_value);
+        $this->whenDbExpects($table, $subject_id, $subject_type, $object_id, $object_type, implode(',', $perm_value));
+
+        $this->givenAMockSubject($subject_id, $subject_type);
+        $this->givenAMockObject($object_id, $object_type);
+
+        $store = new Store($this->mock_db);
+        $result = $store->add($this->mock_subject, $this->mock_object, $perm_value);
+        $this->assertTrue($result);
     }
 
     protected function givenAMockDb()
@@ -61,10 +68,10 @@ class StoreTest extends UnitTest
             ->will($this->returnValue(['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]));
     }
 
-    protected function whenDbExpects($expected_sql, $subject_id, $subject_type, $object_id, $object_type, $perm)
+    protected function whenDbExpects($table, $subject_id, $subject_type, $object_id, $object_type, $perm)
     {
         $this->mock_db->expects($this->once())
-            ->method('')
-            ->with($expected_sql, $this->returnValue(['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]));
+            ->method('insert')
+            ->with($table, ['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]);
     }
 }

@@ -35,3 +35,15 @@ What operations on a perm (for a subject & object)
 * Get the configured keys - application returns a json object
 * Set the keys for a subject & object - application takes a json object & stores it
 * Remove all keys for a subject & object - application deletes a Perm object
+
+How to store perm values?
+
+* One value per row
++ make object_id, object_type, subject_id, subject_type and value unique
++ execute inserts - if they fail the perm was already there so ok
++ how to remove?... we'd have to remove them all first
+
+* All perm values in one field
++ Select with subject & object
++ if it doesn't exist then insert otherwise update
++ implement add($data) and update(Perm) in store
