@@ -1,5 +1,7 @@
 <?php
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Ace\Perm\Store;
 use Ace\Perm\SubjectType;
 use Ace\Perm\ObjectType;
@@ -40,18 +42,25 @@ function(Application $app, $subject_type, $subject_id, $object_type, $object_id)
 });
 
 $app->put('/{subject_type}/{subject_id}/{object_type}/{object_id}', 
-function(Application $app, $subject_type, $subject_id, $object_type, $object_id) use ($store) {
-    
-    // compare ETag of request against the ETag for this resource
-    // reject any incoming requests that contain stale ETags
+function(Application $app, Request $request, $subject_type, $subject_id, $object_type, $object_id) use ($store) {
+   
     $subject = new SubjectType($subject_id, $subject_type);
     $object = new ObjectType($object_id, $object_type);
 
+    // first try to get a perm for this combination of subject and object
+
+    // next compare ETag of request against the ETag for this resource
+    // reject any incoming requests that contain stale ETags
+    
+    if (!$request->getContent()){
+        return new Response('', 400);
+    }
+
     // get request body - expect json - and convert to a perms array
-    $perms = [];
+    $perms = json_decode($request->getContent());
     $perm = $store->add($subject, $object, $perms);
     // return 201 with no body?
-    //return $app->json($data);
+    return new Response('', 201);
 });
 
 return $app;
