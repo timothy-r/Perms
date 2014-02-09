@@ -2,7 +2,7 @@
 
 use Ace\Perm\Perm;
 use Ace\Test\UnitTest;
-require_once(__DIR__.'/../PermMockTrait.php');
+use Ace\Test\PermMockTrait;
 
 class PermTest extends UnitTest
 {
