@@ -49,12 +49,23 @@ class PermTest extends UnitTest
         $this->assertTrue($actual);
     }
     
-    public function testCanRemovePermName()
+    public function testCanRemovePermNameThatExists()
     {
         $name = 'dominate';
         $perm = new Perm($this->subject, $this->object, [$name]);
         $actual = $perm->hasPerm($name);
         $this->assertTrue($actual);
+
+        $perm->remove($name);
+
+        $actual = $perm->hasPerm($name);
+        $this->assertFalse($actual);
+    }
+    
+    public function testCanRemovePermNameWhichDoesntExist()
+    {
+        $name = 'dominate';
+        $perm = new Perm($this->subject, $this->object);
 
         $perm->remove($name);
 
