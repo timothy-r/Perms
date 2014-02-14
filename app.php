@@ -4,6 +4,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Ace\Perm\Store;
+use Ace\Perm\Perm;
 use Ace\Perm\NotFoundException;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -46,7 +47,13 @@ function(Application $app, $subject, $object) use ($store) {
 $app->put('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
    
-    $perm_object = $store->add($subject, $object, $perm);
+    try {
+        $perm_object = $store->get($subject, $object);
+    } catch (NotFoundException $ex){
+        $perm_object = new Perm($subject, $object);
+    }
+    $perm_object->add($perm);
+    $store->update($perm_object); 
     // return 201 with no body
     return new Response('', 201);
 });
@@ -74,11 +81,9 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
    
     try {
         $perm_object = $store->get($subject, $object);
-        if ($perm_object->hasPerm($perm)){
-            // remove perm
-            $store->remove($perm_object, $perm);
-            return new Response('', 200);
-        }
+        $perm_object->remove($perm);
+        $store->update($perm_object);
+        return new Response('', 200);
     } catch (NotFoundException $ex){
     }
     return new Response('', 200);
