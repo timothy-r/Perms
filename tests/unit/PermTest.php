@@ -5,7 +5,6 @@ use Ace\Test\UnitTest;
 
 class PermTest extends UnitTest
 {
-    use PermMockTrait;
     protected $subject = 'user.103@accounts.com';
     protected $object = 'page.12166@content.net';
 
