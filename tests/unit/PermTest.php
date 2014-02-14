@@ -30,4 +30,13 @@ class PermTest extends UnitTest
         $this->assertSame($perms, $actual);
     }
 
+    public function testCanAddPermName()
+    {
+        $name = 'dominate';
+        $perm = new Perm($this->subject, $this->object, []);
+        $perm->add($name);
+        $actual = $perm->hasPerm($name);
+        $this->assertTrue($actual);
+    }
+
 }

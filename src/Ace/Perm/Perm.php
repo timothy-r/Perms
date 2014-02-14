@@ -36,4 +36,9 @@ class Perm
     {
         return array_keys($this->values);
     }
+
+    public function add($name)
+    {
+        $this->values[$name] = true;
+    }
 }
