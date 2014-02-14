@@ -41,4 +41,9 @@ class Perm
     {
         $this->values[$name] = true;
     }
+
+    public function remove($name)
+    {
+        unset($this->values[$name]);
+    }
 }

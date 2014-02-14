@@ -10,15 +10,21 @@ class PermTest extends UnitTest
 
     public function testHasPermReturnsTrueForSetPerms()
     {
-        $perm = new Perm($this->subject, $this->object, ['read', 'write']);
+        $perms = ['read', 'write'];
+        $perm = new Perm($this->subject, $this->object, $perms);
+
         $actual = $perm->hasPerm('read');
+
         $this->assertTrue($actual);
     }
 
     public function testHasPermReturnsFalseForUnsetPerms()
     {
-        $perm = new Perm($this->subject, $this->object, ['read', 'write']);
+        $perms = ['read', 'write'];
+        $perm = new Perm($this->subject, $this->object, $perms);
+
         $actual = $perm->hasPerm('delete');
+
         $this->assertFalse($actual);
     }
 
@@ -26,7 +32,9 @@ class PermTest extends UnitTest
     {
         $perms = ['read', 'write'];
         $perm = new Perm($this->subject, $this->object, $perms);
+
         $actual = $perm->allPerms();
+
         $this->assertSame($perms, $actual);
     }
 
@@ -34,9 +42,23 @@ class PermTest extends UnitTest
     {
         $name = 'dominate';
         $perm = new Perm($this->subject, $this->object, []);
+
         $perm->add($name);
+
         $actual = $perm->hasPerm($name);
         $this->assertTrue($actual);
     }
+    
+    public function testCanRemovePermName()
+    {
+        $name = 'dominate';
+        $perm = new Perm($this->subject, $this->object, [$name]);
+        $actual = $perm->hasPerm($name);
+        $this->assertTrue($actual);
 
+        $perm->remove($name);
+
+        $actual = $perm->hasPerm($name);
+        $this->assertFalse($actual);
+    }
 }
