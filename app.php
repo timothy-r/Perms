@@ -29,16 +29,14 @@ function(Application $app) {
 
 $app->get('/subject/{subject}/object/{object}', 
 function(Application $app, $subject, $object) use ($store) {
-    
     // obtain perms from storage, keyed by subject & object
     try {
         $perm = $store->get($subject, $object);
-        $data = [
+        return $app->json([
             'perms' => $perm->allPerms(), 
             'subject' => $subject,
             'object' => $object,
-        ];
-        return $app->json($data);
+        ]);
     } catch (NotFoundException $ex){
         return new Response('',404);
     }
@@ -46,7 +44,6 @@ function(Application $app, $subject, $object) use ($store) {
 
 $app->put('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
-   
     try {
         $perm_object = $store->get($subject, $object);
     } catch (NotFoundException $ex){
@@ -58,18 +55,17 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
     return new Response('', 201);
 });
 
+// @todo not super sure about this route - just use regular GET on subject/object and then parse result
 $app->get('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
-   
     try{
         $perm_object = $store->get($subject, $object);
         if ($perm_object->hasPerm($perm)){
-            $data = [
-                 'perms' => $perm,
+            return $app->json([
+                $perm => true,
                 'subject' => $subject,
                 'object' => $object,
-            ];
-            return $app->json($data);
+            ]);
         }
     } catch (NotFoundException $ex){
     }
@@ -78,7 +74,6 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
 
 $app->delete('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
-   
     try {
         $perm_object = $store->get($subject, $object);
         $perm_object->remove($perm);
