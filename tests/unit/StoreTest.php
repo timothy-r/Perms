@@ -130,6 +130,22 @@ class StoreTest extends UnitTest
         $this->assertTrue($result);
     }
 
+    public function testUpdateDeletesRemovedPerms()
+    {
+        $value = 'read';
+        $table = 'perm';
+        $this->givenAMockDb();
+        $this->whenDbDoesNotExpectInsert();
+        $this->whenDbExpectsDelete($table, $this->subject, $this->object, $value);
+        $store = new Store($this->mock_db);
+        $perm = new Perm($this->subject, $this->object, [$value]);
+        $perm->remove($value);
+
+        $result = $store->update($perm);
+
+        $this->assertTrue($result);
+    }
+
     public function testUpdateDoesNotAddPreExistingNames()
     {
         $value = 'read';

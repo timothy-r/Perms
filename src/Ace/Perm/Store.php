@@ -35,7 +35,7 @@ class Store implements StoreInterface
     {
         $table = 'perm';
         $options = ['subject' => $subject, 'object' => $object, 'value' => $value];
-        $types = ['text', 'text', 'text', 'text', 'text'];
+        $types = ['text', 'text', 'text'];
         $result = $this->db->insert($table, $options, $types);
         return true;
     }
@@ -47,6 +47,11 @@ class Store implements StoreInterface
         foreach ($perm->added() as $value){
             $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject(), 'value' => $value];
             $result = $this->db->insert($table, $options, $types);
+        }
+
+        foreach ($perm->removed() as $value){
+            $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject(), 'value' => $value];
+            $result = $this->db->delete($table, $options);
         }
         return true;
     }
