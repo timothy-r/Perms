@@ -51,6 +51,25 @@ class StoreTest extends UnitTest
         $this->assertSame($expected, $perm->allPerms());
     }
 
+    
+    /**
+    * @expectedException Ace\Perm\NotFoundException
+    */
+    public function testGetThrowsExceptionForMissingPair()
+    {
+        $rows = [];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ? AND object = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perm = $store->get($this->subject, $this->object);
+    }
+
     public function testAddAddsAPermObject()
     {
         $perm = 'write';

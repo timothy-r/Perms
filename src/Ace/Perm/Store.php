@@ -2,6 +2,7 @@
 
 use Ace\Perm\StoreInterface;
 use Ace\Perm\Perm;
+use Ace\Perm\NotFoundException;
 use Doctrine\DBAL\Connection;
 
 class Store implements StoreInterface
@@ -18,6 +19,9 @@ class Store implements StoreInterface
         $sql = "SELECT * FROM perm WHERE subject = ? AND object = ?";
         $options = [$subject, $object];
         $results = $this->db->fetchAll($sql, $options);
+        if (!count($results)){
+            throw new NotFoundException;
+        }
         $perms = [];
         foreach($results as $result){
             // remove any duplicates

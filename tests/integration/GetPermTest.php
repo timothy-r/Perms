@@ -22,12 +22,21 @@ class GetPermTest extends WebTestCase
         return require __DIR__ . '/../../app.php';
     }
 
-    public function testGetPermSuccess()
+    public function testGetPermFailsForMissingPerm()
     {
          $client = $this->createClient();
          $crawler = $client->request('GET', "{$this->base_url}");
-         $this->assertTrue($client->getResponse()->isOk());
+         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
+
+    public function testGetPermSuccess()
+    {
+         $client = $this->createClient();
+         $crawler = $client->request('PUT', "{$this->base_url}/write");
+         $crawler = $client->request('GET', "{$this->base_url}");
+         $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
 
     public function testPutPermSuccess()
     {

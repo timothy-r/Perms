@@ -4,6 +4,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Ace\Perm\Store;
+use Ace\Perm\NotFoundException;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -29,13 +30,17 @@ $app->get('/subject/{subject}/object/{object}',
 function(Application $app, $subject, $object) use ($store) {
     
     // obtain perms from storage, keyed by subject & object
-    $perm = $store->get($subject, $object);
-    $data = [
-        'perms' => $perm->allPerms(), 
-        'subject' => $subject,
-        'object' => $object,
-    ];
-    return $app->json($data);
+    try {
+        $perm = $store->get($subject, $object);
+        $data = [
+            'perms' => $perm->allPerms(), 
+            'subject' => $subject,
+            'object' => $object,
+        ];
+        return $app->json($data);
+    } catch (NotFoundException $ex){
+        return new Response('',404);
+    }
 });
 
 $app->put('/subject/{subject}/object/{object}/{perm}', 
@@ -49,38 +54,44 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
 $app->get('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
    
-    $perm_object = $store->get($subject, $object);
-    if ($perm_object->hasPerm($perm)){
-        $data = [
-            'perms' => $perm,
-            'subject' => $subject,
-            'object' => $object,
-        ];
-        return $app->json($data);
-    } else {
-        return new Response('', 404);
+    try{
+        $perm_object = $store->get($subject, $object);
+        if ($perm_object->hasPerm($perm)){
+            $data = [
+                 'perms' => $perm,
+                'subject' => $subject,
+                'object' => $object,
+            ];
+            return $app->json($data);
+        }
+    } catch (NotFoundException $ex){
     }
+    return new Response('', 404);
 });
 
 $app->delete('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
    
-    $perm_object = $store->get($subject, $object);
-    if ($perm_object->hasPerm($perm)){
-        // remove perm
-        $store->remove($perm_object, $perm);
-        return new Response('', 200);
-    } else {
-        return new Response('', 200);
+    try {
+        $perm_object = $store->get($subject, $object);
+        if ($perm_object->hasPerm($perm)){
+            // remove perm
+            $store->remove($perm_object, $perm);
+            return new Response('', 200);
+        }
+    } catch (NotFoundException $ex){
     }
+    return new Response('', 200);
 });
 
 $app->delete('/subject/{subject}/object/{object}', 
 function(Application $app, Request $request, $subject, $object) use ($store) {
-   
-    $perm_object = $store->get($subject, $object);
-    $store->remove($perm_object);
-
+    
+    try {
+        $perm_object = $store->get($subject, $object);
+        $store->remove($perm_object);
+    } catch (NotFoundException $ex) {
+    }
     return new Response('', 200);
 });
 
