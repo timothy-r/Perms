@@ -5,6 +5,8 @@ use Silex\Application;
 
 class GetPermTest extends WebTestCase
 {
+    protected $base_url = '/user/111/thing/88';
+
     public function tearDown()
     {
         $client = $this->createClient();
@@ -80,5 +82,12 @@ class GetPermTest extends WebTestCase
          $this->assertSame(200, $client->getResponse()->getStatusCode());
          $crawler = $client->request('GET', '/user/111/thing/88/to-delete');
          $this->assertSame(404, $client->getResponse()->getStatusCode());
+    }
+
+    public function testDeleteAllReturns200WhenNoPermsExist()
+    {
+         $client = $this->createClient();
+         $crawler = $client->request('DELETE', '/user/111/thing/88');
+         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 }
