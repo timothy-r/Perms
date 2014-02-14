@@ -1,0 +1,11 @@
+API for the perms application
+
+GET /subject/id/object/id returns a json object containing the perm names for this pair
+GET /subject/id returns a json object containing all the objects and their perm names for the subject eg all users who have any permission on an issue
+GET /subject/null/object/id returns a json object containing all the subjects and perm names for this object, eg all issues a user has a perm on
+PUT /subject/id/object/id/perm sets the perm name for this pair
+HEAD /subject/id/object/id/perm tests if perm name is set for the pair
+DELETE /subject/id/object/id/perm removes perm name from this pair
+DELETE /subject/id/object/id removes all perm names for the pair
+
+Benefits of this api over putting multiple perms in one request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
