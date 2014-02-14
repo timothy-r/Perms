@@ -1,4 +1,5 @@
 <?php
+
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +51,24 @@ function(Application $app, Request $request, $subject_type, $subject_id, $object
     $perm_object = $store->add($subject, $object, $perm);
     // return 201 with no body?
     return new Response('', 201);
+});
+
+$app->get('/{subject_type}/{subject_id}/{object_type}/{object_id}/{perm}', 
+function(Application $app, Request $request, $subject_type, $subject_id, $object_type, $object_id, $perm) use ($store) {
+   
+    $subject = new SubjectType($subject_id, $subject_type);
+    $object = new ObjectType($object_id, $object_type);
+
+    $perm_object = $store->get($subject, $object);
+    if ($perm_object->hasPerm($perm)){
+        $data = [
+            'perms' => $perm,
+            'subject' => ['id' => $subject->getId(), 'type' => $subject->getType()], 
+            'object' => ['id' => $object->getId(), 'type' => $object->getType()]]; 
+        return $app->json($data);
+    } else {
+        return new Response('', 404);
+    }
 });
 
 return $app;
