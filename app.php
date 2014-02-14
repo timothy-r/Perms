@@ -47,9 +47,7 @@ function(Application $app, Request $request, $subject_type, $subject_id, $object
     $subject = new SubjectType($subject_id, $subject_type);
     $object = new ObjectType($object_id, $object_type);
 
-    // get request body - expect json - and convert to a perms array
-    $perms = [$perm];// json_decode($request->getContent());
-    $perm = $store->add($subject, $object, $perms);
+    $perm_object = $store->add($subject, $object, $perm);
     // return 201 with no body?
     return new Response('', 201);
 });
