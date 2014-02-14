@@ -36,13 +36,14 @@ class Store implements StoreInterface
         return true;
     }
 
-    public function remove(Perm $perm, $value)
+    public function remove(Perm $perm)
     {
         $table = 'perm';
         $subject = $perm->getSubject();
         $object = $perm->getObject();
-        $options = ['subject' => $subject, 'object' => $object, 'value' => $value];
+        $options = ['subject' => $subject, 'object' => $object];
         $result = $this->db->delete($table, $options);
+        // @todo test result
         return true;
     }
 }

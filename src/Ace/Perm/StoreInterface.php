@@ -22,7 +22,7 @@ interface StoreInterface
     * Removes perm from the Subject Object pair
     * @todo this should remove all perm values for the Perm instance
     */
-    public function remove(Perm $perm, $value);
+    public function remove(Perm $perm);
     
     /**
     * Updates the perm's values, both remove and add new ones

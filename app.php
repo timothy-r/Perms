@@ -75,4 +75,13 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
     }
 });
 
+$app->delete('/subject/{subject}/object/{object}', 
+function(Application $app, Request $request, $subject, $object) use ($store) {
+   
+    $perm_object = $store->get($subject, $object);
+    $store->remove($perm_object);
+
+    return new Response('', 200);
+});
+
 return $app;

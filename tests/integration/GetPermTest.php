@@ -83,12 +83,12 @@ class GetPermTest extends WebTestCase
          $crawler = $client->request('GET', "{$this->base_url}/to-delete");
          $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
-        /**
+        
     public function testDeleteAllReturns200WhenNoPermsExist()
     {
          $client = $this->createClient();
          $crawler = $client->request('DELETE', "{$this->base_url}");
          $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
-    */
+    
 }
