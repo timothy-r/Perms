@@ -1,7 +1,5 @@
 <?php namespace Ace\Perm;
 
-use Ace\Perm\SubjectInterface;
-use Ace\Perm\ObjectInterface;
 use Ace\Perm\Perm;
 
 /**
@@ -13,12 +11,12 @@ interface StoreInterface
     * get all perm names for this Subject Object pair
     * @return Ace\Perm\Perm
     */
-    public function get(SubjectInterface $subject, ObjectInterface $object);
+    public function get($subject, $object);
 
     /**
     * Adds this perm name to the Subject Object pair
     */
-    public function add(SubjectInterface $subject, ObjectInterface $object, $value);
+    public function add($subject, $object, $value);
 
     /**
     * Removes perm from the Subject Object pair

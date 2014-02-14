@@ -30,12 +30,12 @@ trait PermMockTrait
 
     protected function givenAMockPerm(array $perms = [])
     {
-        $this->mock_perm = $this->getMock('Ace\Perm\Perm', ['getSubject', 'getObject'], [$this->mock_subject, $this->mock_object]);
+        $this->mock_perm = $this->getMock('Ace\Perm\Perm', ['getSubject', 'getObject'], [$this->subject, $this->object]);
         $this->mock_perm->expects($this->any())
             ->method('getSubject')
-            ->will($this->returnValue($this->mock_subject));
+            ->will($this->returnValue($this->subject));
         $this->mock_perm->expects($this->any())
             ->method('getObject')
-            ->will($this->returnValue($this->mock_object));
+            ->will($this->returnValue($this->object));
     }
 }
