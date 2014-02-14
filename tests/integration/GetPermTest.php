@@ -10,10 +10,7 @@ class GetPermTest extends WebTestCase
     public function tearDown()
     {
         $client = $this->createClient();
-        $crawler = $client->request('DELETE', "{$this->base_url}/write");
-        $crawler = $client->request('DELETE', "{$this->base_url}/admin");
-        $crawler = $client->request('DELETE', "{$this->base_url}/control");
-        $crawler = $client->request('DELETE', "{$this->base_url}/to-delete");
+        $crawler = $client->request('DELETE', "{$this->base_url}");
         parent::tearDown();
     }
 
@@ -36,7 +33,6 @@ class GetPermTest extends WebTestCase
          $crawler = $client->request('GET', "{$this->base_url}");
          $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
-
 
     public function testPutPermSuccess()
     {
