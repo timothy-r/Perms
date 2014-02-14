@@ -43,7 +43,10 @@ class Perm
     {
         if (!isset($this->values[$name])){
             $this->values[$name] = true;
-            $this->added []= $name;
+            $this->added[$name]= true;
+            if (in_array($name, $this->removed)){
+                unset($this->removed[$name]);
+            }
         }
     }
 
@@ -51,17 +54,20 @@ class Perm
     {
         if (isset($this->values[$name])){
             unset($this->values[$name]);
-            $this->removed []= $name;
+            $this->removed[$name] = true;
+            if (in_array($name, $this->added)){
+                unset($this->added[$name]);
+            }
         }
     }
 
     public function added()
     {
-        return $this->added;
+        return array_keys($this->added);
     }
 
     public function removed()
     {
-        return $this->removed;
+        return array_keys($this->removed);
     }
 }

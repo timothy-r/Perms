@@ -94,4 +94,26 @@ class PermTest extends UnitTest
 
         $this->assertSame([$name], $actual);
     }
+
+    public function testAnAddedPermIsNotRemoved()
+    {
+        $name = 'master';
+        $perm = new Perm($this->subject, $this->object, [$name]);
+        $perm->remove($name);
+        $perm->add($name);
+
+        $this->assertTrue(!in_array($name, $perm->removed()));
+        $this->assertTrue(in_array($name, $perm->added()));
+    }
+
+    public function testARemovedPermIsNotAdded()
+    {
+        $name = 'master';
+        $perm = new Perm($this->subject, $this->object);
+        $perm->add($name);
+        $perm->remove($name);
+
+        $this->assertTrue(in_array($name, $perm->removed()));
+        $this->assertTrue(!in_array($name, $perm->added()));
+    }
 }
