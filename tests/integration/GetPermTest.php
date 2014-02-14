@@ -63,15 +63,22 @@ class GetPermTest extends WebTestCase
     public function testDeleteReturns200WhenPermIsMissing()
     {
          $client = $this->createClient();
+         $crawler = $client->request('GET', '/user/111/thing/88/to-delete');
+         $this->assertSame(404, $client->getResponse()->getStatusCode());
          $crawler = $client->request('DELETE', '/user/111/thing/88/to-delete');
          $this->assertSame(200, $client->getResponse()->getStatusCode());
+         $crawler = $client->request('GET', '/user/111/thing/88/to-delete');
+         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
     public function testDeleteReturns200WhenPermExists()
     {
          $client = $this->createClient();
          $crawler = $client->request('PUT', '/user/111/thing/88/to-delete');
+         $crawler = $client->request('PUT', '/user/111/thing/88/to-delete');
          $crawler = $client->request('DELETE', '/user/111/thing/88/to-delete');
          $this->assertSame(200, $client->getResponse()->getStatusCode());
+         $crawler = $client->request('GET', '/user/111/thing/88/to-delete');
+         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 }
