@@ -1,7 +1,5 @@
 <?php namespace Ace\Perm;
 
-use Ace\Perm\SubjectInterface;
-use Ace\Perm\ObjectInterface;
 
 class Perm
 {
@@ -9,7 +7,7 @@ class Perm
     private $object;
     private $values = [];
 
-    public function __construct(SubjectInterface $subject, ObjectInterface $object, array $values = [])
+    public function __construct($subject, $object, array $values = [])
     {
         $this->subject = $subject;
         $this->object = $object;
