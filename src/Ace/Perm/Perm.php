@@ -19,6 +19,16 @@ class Perm
         }
     }
     
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    public function getObject()
+    {
+        return $this->object;
+    }
+
     public function hasPerm($name)
     {
         return isset($this->values[$name]);

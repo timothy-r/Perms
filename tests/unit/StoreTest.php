@@ -68,7 +68,7 @@ class StoreTest extends UnitTest
 
         $table = 'perm';
         $this->givenAMockDb();
-        $this->whenDbExpects($table, $subject_id, $subject_type, $object_id, $object_type, $perm);
+        $this->whenDbExpectsInsert($table, $subject_id, $subject_type, $object_id, $object_type, $perm);
 
         $this->givenAMockSubject($subject_id, $subject_type);
         $this->givenAMockObject($object_id, $object_type);
@@ -77,6 +77,30 @@ class StoreTest extends UnitTest
         $result = $store->add($this->mock_subject, $this->mock_object, $perm);
         $this->assertTrue($result);
     }
+
+    public function testRemoveRemovesAPerm()
+    {
+        $object_id = '1s';
+        $object_type = 'user';
+        $subject_id = 'x';
+        $subject_type = 'thread';
+        $value = 'write';
+
+        $table = 'perm';
+        $this->givenAMockDb();
+        $this->whenDbExpectsDelete($table, $subject_id, $subject_type, $object_id, $object_type, $value);
+
+        $this->givenAMockSubject($subject_id, $subject_type);
+        $this->givenAMockObject($object_id, $object_type);
+        
+        $this->givenAMockPerm([$value]);
+
+        $store = new Store($this->mock_db);
+        $result = $store->remove($this->mock_perm, $value);
+        $this->assertTrue($result);
+
+    }
+
 
     protected function givenAMockDb()
     {
@@ -91,10 +115,17 @@ class StoreTest extends UnitTest
             ->will($this->returnValue($rows));
     }
 
-    protected function whenDbExpects($table, $subject_id, $subject_type, $object_id, $object_type, $perm)
+    protected function whenDbExpectsInsert($table, $subject_id, $subject_type, $object_id, $object_type, $perm)
     {
         $this->mock_db->expects($this->once())
             ->method('insert')
+            ->with($table, ['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]);
+    }
+
+    protected function whenDbExpectsDelete($table, $subject_id, $subject_type, $object_id, $object_type, $perm)
+    {
+        $this->mock_db->expects($this->once())
+            ->method('delete')
             ->with($table, ['subject_id' => $subject_id, 'subject_type' => $subject_type, 'object_id' => $object_id, 'object_type' => $object_type, 'value' => $perm]);
     }
 }

@@ -4,6 +4,7 @@ trait PermMockTrait
 {
     protected $mock_subject;
     protected $mock_object;
+    protected $mock_perm;
 
     protected function givenAMockSubject($id = 'x', $type = 'User')
     {
@@ -27,4 +28,14 @@ trait PermMockTrait
             ->will($this->returnValue($type));
     }
 
+    protected function givenAMockPerm(array $perms = [])
+    {
+        $this->mock_perm = $this->getMock('Ace\Perm\Perm', ['getSubject', 'getObject'], [$this->mock_subject, $this->mock_object]);
+        $this->mock_perm->expects($this->any())
+            ->method('getSubject')
+            ->will($this->returnValue($this->mock_subject));
+        $this->mock_perm->expects($this->any())
+            ->method('getObject')
+            ->will($this->returnValue($this->mock_object));
+    }
 }

@@ -22,6 +22,7 @@ class Store implements StoreInterface
         $results = $this->db->fetchAll($sql, $options);
         $perms = [];
         foreach($results as $result){
+            // remove any duplicates
             $perms [$result['value']]= $result['value'];
         }
         $perm = new Perm($subject, $object, $perms);
@@ -35,5 +36,16 @@ class Store implements StoreInterface
         $types = ['text', 'text', 'text', 'text', 'text'];
         $result = $this->db->insert($table, $options, $types);
         return true;
+    }
+
+    public function remove(Perm $perm, $value)
+    {
+        $table = 'perm';
+        $subject = $perm->getSubject();
+        $object = $perm->getObject();
+        $options = ['subject_id' => $subject->getId(), 'subject_type' => $subject->getType(), 'object_id' => $object->getId(), 'object_type' => $object->getType(), 'value' => $value];
+        $result = $this->db->delete($table, $options);
+        return true;
+
     }
 }

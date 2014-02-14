@@ -5,9 +5,14 @@ use Silex\Application;
 
 class GetPermTest extends WebTestCase
 {
-    public function setUp()
+    public function tearDown()
     {
-        parent::setUp();
+        $client = $this->createClient();
+        $crawler = $client->request('DELETE', '/user/111/thing/88/write');
+        $crawler = $client->request('DELETE', '/user/111/thing/88/admin');
+        $crawler = $client->request('DELETE', '/user/111/thing/88/control');
+        $crawler = $client->request('DELETE', '/user/111/thing/88/to-delete');
+        parent::tearDown();
     }
 
     public function createApplication()
@@ -52,6 +57,21 @@ class GetPermTest extends WebTestCase
          $client = $this->createClient();
          $crawler = $client->request('PUT', '/user/111/thing/88/control');
          $crawler = $client->request('HEAD', '/user/111/thing/88/control');
+         $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function testDeleteReturns200WhenPermIsMissing()
+    {
+         $client = $this->createClient();
+         $crawler = $client->request('DELETE', '/user/111/thing/88/to-delete');
+         $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function testDeleteReturns200WhenPermExists()
+    {
+         $client = $this->createClient();
+         $crawler = $client->request('PUT', '/user/111/thing/88/to-delete');
+         $crawler = $client->request('DELETE', '/user/111/thing/88/to-delete');
          $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 }

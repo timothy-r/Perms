@@ -71,4 +71,20 @@ function(Application $app, Request $request, $subject_type, $subject_id, $object
     }
 });
 
+$app->delete('/{subject_type}/{subject_id}/{object_type}/{object_id}/{perm}', 
+function(Application $app, Request $request, $subject_type, $subject_id, $object_type, $object_id, $perm) use ($store) {
+   
+    $subject = new SubjectType($subject_id, $subject_type);
+    $object = new ObjectType($object_id, $object_type);
+
+    $perm_object = $store->get($subject, $object);
+    if ($perm_object->hasPerm($perm)){
+        // remove perm
+        $store->remove($perm_object, $perm);
+        return new Response('', 200);
+    } else {
+        return new Response('', 200);
+    }
+});
+
 return $app;
