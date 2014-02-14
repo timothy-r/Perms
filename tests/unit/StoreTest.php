@@ -1,6 +1,7 @@
 <?php
 
 use Ace\Perm\Store;
+use Ace\Perm\Perm;
 use Ace\Test\UnitTest;
 use Ace\Test\PermMockTrait;
 
@@ -101,7 +102,49 @@ class StoreTest extends UnitTest
 
     }
 */
+    
+    public function testUpdateAddsAPermObject()
+    {
+        $value = 'read';
+        $table = 'perm';
+        $this->givenAMockDb();
+        $this->whenDbExpectsInsert($table, $this->subject, $this->object, $value);
+        $store = new Store($this->mock_db);
+        $perm = new Perm($this->subject, $this->object);
+        $perm->add($value);
 
+        $result = $store->update($perm);
+
+        $this->assertTrue($result);
+    }
+    
+    public function testNoUpdatesWithoutAddsToAPermObject()
+    {
+        $this->givenAMockDb();
+        $this->whenDbDoesNotExpectInsert();
+        $store = new Store($this->mock_db);
+        $perm = new Perm($this->subject, $this->object);
+
+        $result = $store->update($perm);
+
+        $this->assertTrue($result);
+    }
+
+    public function testUpdateDoesNotAddPreExistingNames()
+    {
+        $value = 'read';
+        $table = 'perm';
+        $this->givenAMockDb();
+        $this->whenDbExpectsInsert($table, $this->subject, $this->object, $value);
+        $store = new Store($this->mock_db);
+        $perm = new Perm($this->subject, $this->object, ['other']);
+        $perm->add($value);
+
+        $result = $store->update($perm);
+
+        $this->assertTrue($result);
+    }
+    
     protected function givenAMockDb()
     {
         $this->mock_db = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
@@ -120,6 +163,12 @@ class StoreTest extends UnitTest
         $this->mock_db->expects($this->once())
             ->method('insert')
             ->with($table, ['subject' => $subject, 'object' => $object, 'value' => $perm]);
+    }
+
+    protected function whenDbDoesNotExpectInsert()
+    {
+        $this->mock_db->expects($this->never())
+            ->method('insert');
     }
 
     protected function whenDbExpectsDelete($table, $subject, $object, $perm)
