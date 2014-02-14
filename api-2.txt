@@ -2,13 +2,15 @@ API 2 for the perms application
 
 The id parameters contain type and id information, subject and object are literals
 
-GET /subject/{$id}/object/{$id} returns a json object containing the perm names for this pair
 PUT /subject/{$id}/object/{$id}/perm sets the perm name for this pair
-HEAD /subject/{$id}/object/{$id}/perm tests if perm name is set for the pair
+GET/HEAD /subject/{$id}/object/{$id}/perm tests if perm name is set for the pair
 DELETE /subject/{$id}/object/{$id}/perm removes perm name from this pair
 DELETE /subject/{$id}/object/{$id} removes all perm names for the pair
+GET /subject/{$id}/object/{$id} returns a json object containing the perm names for this pair
 
 GET /subject/{$id} returns a json object containing all the objects and their perm names for the subject eg all users who have any permission on an issue
+GET /subject/($id}/perm returns a json object containing all the objects with this perm name for the subject, eg all user who may admin an issue
 GET /object/{$id} returns a json object containing all the subjects and perm names for this object, eg all issues a user has a perm on
+GET /object/{$id}/perm returns a json object containing all the subjects with this perm name set for this object, eg all issues a user has admin perm on
 
 Benefits of this api over putting multiple perms in one request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
