@@ -31,15 +31,6 @@ class Store implements StoreInterface
         return $perm;
     }
 
-    public function add($subject, $object, $value)
-    {
-        $table = 'perm';
-        $options = ['subject' => $subject, 'object' => $object, 'value' => $value];
-        $types = ['text', 'text', 'text'];
-        $result = $this->db->insert($table, $options, $types);
-        return true;
-    }
-    
     public function update(Perm $perm)
     {
         $table = 'perm';

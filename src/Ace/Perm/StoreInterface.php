@@ -14,11 +14,6 @@ interface StoreInterface
     public function get($subject, $object);
 
     /**
-    * Adds this perm name to the Subject Object pair
-    */
-    public function add($subject, $object, $value);
-
-    /**
     * Stores Perm's state
     */
     public function update(Perm $perm);
@@ -28,9 +23,4 @@ interface StoreInterface
     * @todo this should remove all perm values for the Perm instance
     */
     public function remove(Perm $perm);
-    
-    /**
-    * Updates the perm's values, both remove and add new ones
-    */
-    // public function update(Perms $perm); 
 }

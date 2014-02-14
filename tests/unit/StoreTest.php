@@ -71,22 +71,7 @@ class StoreTest extends UnitTest
         $perm = $store->get($this->subject, $this->object);
     }
 
-    public function testAddAddsAPermObject()
-    {
-        $perm = 'write';
-
-        $table = 'perm';
-        $this->givenAMockDb();
-        $this->whenDbExpectsInsert($table, $this->subject, $this->object, $perm);
-
-
-        $store = new Store($this->mock_db);
-        $result = $store->add($this->subject, $this->object, $perm);
-        $this->assertTrue($result);
-    }
-    
-    /*
-    public function testRemoveRemovesAPerm()
+    public function testUpdateRemovesAPerm()
     {
         $value = 'write';
 
@@ -95,13 +80,14 @@ class StoreTest extends UnitTest
         $this->whenDbExpectsDelete($table, $this->subject, $this->object, $value);
 
         $this->givenAMockPerm([$value]);
+        $this->mock_perm->expects($this->any())
+            ->method('removed')
+            ->will($this->returnValue([$value]));
 
         $store = new Store($this->mock_db);
-        $result = $store->remove($this->mock_perm, $value);
+        $result = $store->update($this->mock_perm);
         $this->assertTrue($result);
-
     }
-*/
     
     public function testUpdateAddsAPermObject()
     {
