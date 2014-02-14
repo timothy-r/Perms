@@ -15,7 +15,7 @@ class Store implements StoreInterface
 
     public function get($subject, $object)
     {
-        $sql = "SELECT * FROM perm WHERE subject_id = ? AND object_id = ?";
+        $sql = "SELECT * FROM perm WHERE subject = ? AND object = ?";
         $options = [$subject, $object];
         $results = $this->db->fetchAll($sql, $options);
         $perms = [];
@@ -30,7 +30,7 @@ class Store implements StoreInterface
     public function add($subject, $object, $value)
     {
         $table = 'perm';
-        $options = ['subject_id' => $subject, 'object_id' => $object, 'value' => $value];
+        $options = ['subject' => $subject, 'object' => $object, 'value' => $value];
         $types = ['text', 'text', 'text', 'text', 'text'];
         $result = $this->db->insert($table, $options, $types);
         return true;
@@ -41,7 +41,7 @@ class Store implements StoreInterface
         $table = 'perm';
         $subject = $perm->getSubject();
         $object = $perm->getObject();
-        $options = ['subject_id' => $subject, 'object_id' => $object, 'value' => $value];
+        $options = ['subject' => $subject, 'object' => $object, 'value' => $value];
         $result = $this->db->delete($table, $options);
         return true;
     }

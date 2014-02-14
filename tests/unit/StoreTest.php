@@ -30,14 +30,14 @@ class StoreTest extends UnitTest
         $rows = [];
         foreach ($values as $value){
         $rows[]= [
-            'subject_id' => $this->subject,
-            'object_id' => $this->object,
+            'subject' => $this->subject,
+            'object' => $this->object,
             'value' => $value
        ];
        }
 
         $expected_sql = 
-            "SELECT * FROM perm WHERE subject_id = ? AND object_id = ?";
+            "SELECT * FROM perm WHERE subject = ? AND object = ?";
         
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
@@ -99,13 +99,13 @@ class StoreTest extends UnitTest
     {
         $this->mock_db->expects($this->once())
             ->method('insert')
-            ->with($table, ['subject_id' => $subject, 'object_id' => $object, 'value' => $perm]);
+            ->with($table, ['subject' => $subject, 'object' => $object, 'value' => $perm]);
     }
 
     protected function whenDbExpectsDelete($table, $subject, $object, $perm)
     {
         $this->mock_db->expects($this->once())
             ->method('delete')
-            ->with($table, ['subject_id' => $subject, 'object_id' => $object, 'value' => $perm]);
+            ->with($table, ['subject' => $subject, 'object' => $object, 'value' => $perm]);
     }
 }
