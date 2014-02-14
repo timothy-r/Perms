@@ -1,4 +1,4 @@
-<?php 
+<?php namespace Ace\Test;
 
 trait PermMockTrait
 {
