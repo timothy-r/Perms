@@ -72,4 +72,26 @@ class PermTest extends UnitTest
         $actual = $perm->hasPerm($name);
         $this->assertFalse($actual);
     }
+
+    public function testCanGetAddedPerms()
+    {
+        $name = 'master';
+        $perm = new Perm($this->subject, $this->object, []);
+        $perm->add($name);
+        
+        $actual = $perm->added();
+
+        $this->assertSame([$name], $actual);
+    }
+
+    public function testCanGetRemovedPerms()
+    {
+        $name = 'master';
+        $perm = new Perm($this->subject, $this->object, [$name]);
+        $perm->remove($name);
+        
+        $actual = $perm->removed();
+
+        $this->assertSame([$name], $actual);
+    }
 }

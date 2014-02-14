@@ -6,6 +6,8 @@ class Perm
     private $subject;
     private $object;
     private $values = [];
+    private $added = [];
+    private $removed = [];
 
     public function __construct($subject, $object, array $values = [])
     {
@@ -39,11 +41,27 @@ class Perm
 
     public function add($name)
     {
-        $this->values[$name] = true;
+        if (!isset($this->values[$name])){
+            $this->values[$name] = true;
+            $this->added []= $name;
+        }
     }
 
     public function remove($name)
     {
-        unset($this->values[$name]);
+        if (isset($this->values[$name])){
+            unset($this->values[$name]);
+            $this->removed []= $name;
+        }
+    }
+
+    public function added()
+    {
+        return $this->added;
+    }
+
+    public function removed()
+    {
+        return $this->removed;
     }
 }
