@@ -17,6 +17,11 @@ class GetPermTest extends WebTestCase
          $crawler = $client->request('GET', '/user/111/thing/88');
          $this->assertTrue($client->getResponse()->isOk());
     }
+
+    public function testPutPermSuccess()
+    {
+         $client = $this->createClient();
+         $crawler = $client->request('PUT', '/user/111/thing/88/write');
+         $this->assertSame(201, $client->getResponse()->getStatusCode());
+    }
 }
-
-

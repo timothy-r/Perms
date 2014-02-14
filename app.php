@@ -41,23 +41,14 @@ function(Application $app, $subject_type, $subject_id, $object_type, $object_id)
     return $app->json($data);
 });
 
-$app->put('/{subject_type}/{subject_id}/{object_type}/{object_id}', 
-function(Application $app, Request $request, $subject_type, $subject_id, $object_type, $object_id) use ($store) {
+$app->put('/{subject_type}/{subject_id}/{object_type}/{object_id}/{perm}', 
+function(Application $app, Request $request, $subject_type, $subject_id, $object_type, $object_id, $perm) use ($store) {
    
     $subject = new SubjectType($subject_id, $subject_type);
     $object = new ObjectType($object_id, $object_type);
 
-    // first try to get a perm for this combination of subject and object
-
-    // next compare ETag of request against the ETag for this resource
-    // reject any incoming requests that contain stale ETags
-    
-    if (!$request->getContent()){
-        return new Response('', 400);
-    }
-
     // get request body - expect json - and convert to a perms array
-    $perms = json_decode($request->getContent());
+    $perms = [$perm];// json_decode($request->getContent());
     $perm = $store->add($subject, $object, $perms);
     // return 201 with no body?
     return new Response('', 201);
