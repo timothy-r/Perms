@@ -2,15 +2,30 @@ API 2 for the perms application
 
 The id parameters contain type and id information, subject and object are literals
 
-PUT /subject/{$id}/object/{$id}/perm sets the perm name for this pair
-GET/HEAD /subject/{$id}/object/{$id}/perm tests if perm name is set for the pair
-DELETE /subject/{$id}/object/{$id}/perm removes perm name from this pair
+PUT /subject/{$id}/object/{$id}/{$perm} sets the perm name for this pair
+GET/HEAD /subject/{$id}/object/{$id}/{$perm} tests if perm name is set for the pair
+DELETE /subject/{$id}/object/{$id}/{$perm} removes perm name from this pair
 DELETE /subject/{$id}/object/{$id} removes all perm names for the pair
 GET /subject/{$id}/object/{$id} returns a json object containing the perm names for this pair
 
 GET /subject/{$id} returns a json object containing all the objects and their perm names for the subject eg all users who have any permission on an issue
-GET /subject/($id}/perm returns a json object containing all the objects with this perm name for the subject, eg all user who may admin an issue
-GET /object/{$id} returns a json object containing all the subjects and perm names for this object, eg all issues a user has a perm on
-GET /object/{$id}/perm returns a json object containing all the subjects with this perm name set for this object, eg all issues a user has admin perm on
+GET /subject/($id}/{$perm} returns a json object containing all the objects with this perm name for the subject, eg all user who may admin an issue
+GET /object/{$id} returns a json object containing all the subjects and perm names for this object, eg all things a user has any perm on
+GET /object/{$id}/{$perm} returns a json object containing all the subjects with this perm name set for this object, eg all things a user has admin perm on
 
 Benefits of this api over putting multiple perms in one request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
+Downside: no way to get all subjects of a type and perm that a User has a perm on (or any perm on) using both a type and id means the store can answer questins like which issues a user has can read. This implementation can only tell you which things a user can read, the ids are intentionally opaque
+This is because this is a simple store, further perms functionality can be built on top of this with code that can filter the id strings? So get all perms and filter out the ones you don't want?  
+It would be better to offer a filter api to the perm store than ask clients to filter out unwanted results.
+
+Use query params to perform wild card matches, use regular api for specifically identified objects and subjects
+
+GET /object/{$id}?subject=x
+GET /object/{$id}/{$perm}?subject=x
+GET /subject/{$id}?object=y
+GET /subject/{$id}/{$perm}?object=y
+
+Would adding type to subject and object improve this api?
+It would add an axis to filter on, but only one axis.
+
+Is this the tension between independent resources and 'filters' on resource attributes/resources?
