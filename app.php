@@ -27,6 +27,22 @@ function(Application $app) {
     return $app->json($data);
 });
 
+$app->get('/subject/{subject}', 
+function(Application $app, $subject) use ($store) {
+    // obtain perms from storage, keyed by subject 
+    try {
+        $perm_instances = $store->getForSubject($subject);
+        $data = [];
+        foreach ($perm_instances as $perm_instance){
+            $data []= ['perms' => $perm_instance->all(), 'subject' => $subject, 'object' => $perm_instance->object()];
+        }
+        return $app->json($data);
+    } catch (NotFoundException $ex){
+        return new Response('',404);
+    }
+});
+
+
 $app->get('/subject/{subject}/object/{object}', 
 function(Application $app, $subject, $object) use ($store) {
     // obtain perms from storage, keyed by subject & object
