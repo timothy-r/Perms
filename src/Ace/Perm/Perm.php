@@ -3,10 +3,29 @@
 
 class Perm
 {
+    /**
+    * @var string
+    */
     private $subject;
+
+    /**
+    * @var string
+    */
     private $object;
+
+    /**
+    * @var array
+    */
     private $values = [];
+
+    /**
+    * @var array
+    */
     private $added = [];
+
+    /**
+    * @var array
+    */
     private $removed = [];
 
     public function __construct($subject, $object, array $values = [])
