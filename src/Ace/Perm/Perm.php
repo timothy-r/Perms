@@ -48,7 +48,7 @@ class Perm
         return $this->object;
     }
 
-    public function hasPerm($name)
+    public function has($name)
     {
         return isset($this->values[$name]);
     }

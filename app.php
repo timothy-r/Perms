@@ -60,7 +60,7 @@ $app->get('/subject/{subject}/object/{object}/{perm}',
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try{
         $perm_object = $store->get($subject, $object);
-        if ($perm_object->hasPerm($perm)){
+        if ($perm_object->has($perm)){
             return $app->json([
                 $perm => true,
                 'subject' => $subject,

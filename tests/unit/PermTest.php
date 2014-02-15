@@ -13,7 +13,7 @@ class PermTest extends UnitTest
         $perms = ['read', 'write'];
         $perm = new Perm($this->subject, $this->object, $perms);
 
-        $actual = $perm->hasPerm('read');
+        $actual = $perm->has('read');
 
         $this->assertTrue($actual);
     }
@@ -23,7 +23,7 @@ class PermTest extends UnitTest
         $perms = ['read', 'write'];
         $perm = new Perm($this->subject, $this->object, $perms);
 
-        $actual = $perm->hasPerm('delete');
+        $actual = $perm->has('delete');
 
         $this->assertFalse($actual);
     }
@@ -45,7 +45,7 @@ class PermTest extends UnitTest
 
         $perm->add($name);
 
-        $actual = $perm->hasPerm($name);
+        $actual = $perm->has($name);
         $this->assertTrue($actual);
     }
     
@@ -53,12 +53,12 @@ class PermTest extends UnitTest
     {
         $name = 'dominate';
         $perm = new Perm($this->subject, $this->object, [$name]);
-        $actual = $perm->hasPerm($name);
+        $actual = $perm->has($name);
         $this->assertTrue($actual);
 
         $perm->remove($name);
 
-        $actual = $perm->hasPerm($name);
+        $actual = $perm->has($name);
         $this->assertFalse($actual);
     }
     
@@ -69,7 +69,7 @@ class PermTest extends UnitTest
 
         $perm->remove($name);
 
-        $actual = $perm->hasPerm($name);
+        $actual = $perm->has($name);
         $this->assertFalse($actual);
     }
 
