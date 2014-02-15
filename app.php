@@ -31,9 +31,9 @@ $app->get('/subject/{subject}/object/{object}',
 function(Application $app, $subject, $object) use ($store) {
     // obtain perms from storage, keyed by subject & object
     try {
-        $perm = $store->get($subject, $object);
+        $perm_instance = $store->get($subject, $object);
         return $app->json([
-            'perms' => $perm->allPerms(), 
+            'perms' => $perm_instance->all(), 
             'subject' => $subject,
             'object' => $object,
         ]);
@@ -45,12 +45,12 @@ function(Application $app, $subject, $object) use ($store) {
 $app->put('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try {
-        $perm_object = $store->get($subject, $object);
+        $perm_instance = $store->get($subject, $object);
     } catch (NotFoundException $ex){
-        $perm_object = new Perm($subject, $object);
+        $perm_instance = new Perm($subject, $object);
     }
-    $perm_object->add($perm);
-    $store->update($perm_object); 
+    $perm_instance->add($perm);
+    $store->update($perm_instance); 
     // return 201 with no body
     return new Response('', 201);
 });
@@ -59,8 +59,8 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
 $app->get('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try{
-        $perm_object = $store->get($subject, $object);
-        if ($perm_object->hasPerm($perm)){
+        $perm_instance = $store->get($subject, $object);
+        if ($perm_instance->has($perm)){
             return $app->json([
                 $perm => true,
                 'subject' => $subject,
@@ -75,9 +75,9 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
 $app->delete('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try {
-        $perm_object = $store->get($subject, $object);
-        $perm_object->remove($perm);
-        $store->update($perm_object);
+        $perm_instance = $store->get($subject, $object);
+        $perm_instance->remove($perm);
+        $store->update($perm_instance);
         return new Response('', 200);
     } catch (NotFoundException $ex){
     }
@@ -88,8 +88,8 @@ $app->delete('/subject/{subject}/object/{object}',
 function(Application $app, Request $request, $subject, $object) use ($store) {
     
     try {
-        $perm_object = $store->get($subject, $object);
-        $store->remove($perm_object);
+        $perm_instance = $store->get($subject, $object);
+        $store->remove($perm_instance);
     } catch (NotFoundException $ex) {
     }
     return new Response('', 200);

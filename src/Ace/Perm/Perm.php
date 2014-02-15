@@ -3,10 +3,29 @@
 
 class Perm
 {
+    /**
+    * @var string
+    */
     private $subject;
+
+    /**
+    * @var string
+    */
     private $object;
+
+    /**
+    * @var array
+    */
     private $values = [];
+
+    /**
+    * @var array
+    */
     private $added = [];
+
+    /**
+    * @var array
+    */
     private $removed = [];
 
     public function __construct($subject, $object, array $values = [])
@@ -19,26 +38,26 @@ class Perm
         }
     }
     
-    public function getSubject()
+    public function subject()
     {
         return $this->subject;
     }
 
-    public function getObject()
+    public function object()
     {
         return $this->object;
     }
 
-    public function hasPerm($name)
+    public function has($name)
     {
         return isset($this->values[$name]);
     }
 
-    public function allPerms()
+    public function all()
     {
         return array_keys($this->values);
     }
-
+    
     public function add($name)
     {
         if (!isset($this->values[$name])){
