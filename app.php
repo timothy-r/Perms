@@ -27,6 +27,9 @@ function(Application $app) {
     return $app->json($data);
 });
 
+/**
+* Get all Perms for Subject
+*/
 $app->get('/subject/{subject}', 
 function(Application $app, $subject) use ($store) {
     // obtain perms from storage, keyed by subject 
@@ -41,8 +44,26 @@ function(Application $app, $subject) use ($store) {
         return new Response('',404);
     }
 });
+/*
+$app->get('/subject/{subject}/{perm}', 
+function(Application $app, $subject, $perm) use ($store) {
+    // obtain perms from storage, keyed by subject 
+    try {
+        $perm_instances = $store->getAllForSubjectWithPerm($subject, $perm);
+        $data = [];
+        foreach ($perm_instances as $perm_instance){
+            $data []= ['subject' => $subject, 'object' => $perm_instance->object()];
+        }
+        return $app->json($data);
+    } catch (NotFoundException $ex){
+        return new Response('',404);
+    }
+});
+*/
 
-
+/**
+* Get all perms for Subject Object pair
+*/
 $app->get('/subject/{subject}/object/{object}', 
 function(Application $app, $subject, $object) use ($store) {
     // obtain perms from storage, keyed by subject & object
@@ -58,6 +79,9 @@ function(Application $app, $subject, $object) use ($store) {
     }
 });
 
+/**
+* Set perm name on Subject Object pair
+*/
 $app->put('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try {
@@ -71,14 +95,15 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
     return new Response('', 201);
 });
 
-// @todo not super sure about this route - just use regular GET on subject/object and then parse result
+/**
+* Test if Subject Object pair have perm set
+*/
 $app->get('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try{
         $perm_instance = $store->get($subject, $object);
         if ($perm_instance->has($perm)){
             return $app->json([
-                $perm => true,
                 'subject' => $subject,
                 'object' => $object,
             ]);
@@ -88,6 +113,9 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
     return new Response('', 404);
 });
 
+/**
+* Remove perm from Subject Object pair
+*/
 $app->delete('/subject/{subject}/object/{object}/{perm}', 
 function(Application $app, Request $request, $subject, $object, $perm) use ($store) {
     try {
@@ -100,6 +128,9 @@ function(Application $app, Request $request, $subject, $object, $perm) use ($sto
     return new Response('', 200);
 });
 
+/**
+* Remove all perms from Subject Object pair
+*/
 $app->delete('/subject/{subject}/object/{object}', 
 function(Application $app, Request $request, $subject, $object) use ($store) {
     
