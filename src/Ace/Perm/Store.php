@@ -31,6 +31,10 @@ class Store implements StoreInterface
         return $perm;
     }
 
+    public function getForSubject($subject)
+    {
+    }
+
     public function update(Perm $perm)
     {
         $table = 'perm';
