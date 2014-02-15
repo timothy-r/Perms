@@ -20,6 +20,12 @@ interface StoreInterface
     public function getAllForSubject($subject);
 
     /**
+    * Get all Perm instances for this Subject which contain perm name
+    * @return array of Ace\Perm\Perm instances
+    */
+    public function getAllForSubjectWithPerm($subject, $perm);
+
+    /**
     * Stores Perm's state
     * adds any added perm names
     * removes any removed perm names

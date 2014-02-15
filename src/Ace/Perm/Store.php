@@ -20,10 +20,8 @@ class Store implements StoreInterface
     {
         $sql = "SELECT * FROM perm WHERE subject = ? AND object = ?";
         $options = [$subject, $object];
-        $results = $this->db->fetchAll($sql, $options);
-        if (!count($results)){
-            throw new NotFoundException;
-        }
+        $results = $this->fetchAll($sql, $options);
+
         $perms = [];
         foreach($results as $result){
             // remove any duplicates
@@ -37,11 +35,7 @@ class Store implements StoreInterface
     {
         $sql = "SELECT * FROM perm WHERE subject = ?";
         $options = [$subject];
-        $results = $this->db->fetchAll($sql, $options);
-        
-        if (!count($results)){
-            throw new NotFoundException;
-        }
+        $results = $this->fetchAll($sql, $options);
 
         // construct multiple Perm class instances, 1 per unique object in 
         $perms = [];
@@ -57,6 +51,11 @@ class Store implements StoreInterface
             $perm_objects []= new Perm($subject, $object, $perm);
         }
         return $perm_objects;
+    }
+
+    public function getAllForSubjectWithPerm($subject, $perm)
+    {
+
     }
 
     public function update(Perm $perm)
@@ -80,5 +79,15 @@ class Store implements StoreInterface
         $result = $this->db->delete($this->table, $options);
         // @todo test result
         return true;
+    }
+
+    private function fetchAll($sql, $options)
+    {
+        $results = $this->db->fetchAll($sql, $options);
+        
+        if (!count($results)){
+            throw new NotFoundException;
+        }
+        return $results;
     }
 }
