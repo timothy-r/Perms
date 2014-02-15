@@ -33,7 +33,7 @@ function(Application $app, $subject, $object) use ($store) {
     try {
         $perm = $store->get($subject, $object);
         return $app->json([
-            'perms' => $perm->allPerms(), 
+            'perms' => $perm->all(), 
             'subject' => $subject,
             'object' => $object,
         ]);

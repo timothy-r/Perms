@@ -49,7 +49,7 @@ class StoreTest extends UnitTest
         $this->assertInstanceOf('Ace\Perm\Perm', $perm);
         
         $expected = array_unique($values);
-        $this->assertSame($expected, $perm->allPerms());
+        $this->assertSame($expected, $perm->all());
     }
 
     

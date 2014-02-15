@@ -53,11 +53,11 @@ class Perm
         return isset($this->values[$name]);
     }
 
-    public function allPerms()
+    public function all()
     {
         return array_keys($this->values);
     }
-
+    
     public function add($name)
     {
         if (!isset($this->values[$name])){

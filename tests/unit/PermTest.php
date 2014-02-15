@@ -33,7 +33,7 @@ class PermTest extends UnitTest
         $perms = ['read', 'write'];
         $perm = new Perm($this->subject, $this->object, $perms);
 
-        $actual = $perm->allPerms();
+        $actual = $perm->all();
 
         $this->assertSame($perms, $actual);
     }
