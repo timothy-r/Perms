@@ -30,11 +30,11 @@ class StoreTest extends UnitTest
     {
         $rows = [];
         foreach ($values as $value){
-        $rows[]= [
-            'subject' => $this->subject,
-            'object' => $this->object,
-            'value' => $value
-       ];
+            $rows[]= [
+                'subject' => $this->subject,
+                'object' => $this->object,
+                'value' => $value
+            ];
        }
 
         $expected_sql = 
@@ -69,6 +69,80 @@ class StoreTest extends UnitTest
         $store = new Store($this->mock_db);
 
         $perm = $store->get($this->subject, $this->object);
+    }
+
+    /**
+    * @expectedException Ace\Perm\NotFoundException
+    */
+    public function testGetForSubjectThrowsExceptionForMissingSubject()
+    {
+        $rows = [];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getForSubject($this->subject);
+    }
+
+    /**
+    * @dataProvider getPermValues
+    */
+    public function testGetForSubjectReturnsMultiplePerms($values)
+    {
+        $rows = [];
+        foreach ($values as $value){
+            $rows[]= [
+                'subject' => $this->subject,
+                'object' => $this->object . '-' . rand(1, 100000),
+                'value' => $value
+            ];
+        }
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getForSubject($this->subject);
+        $this->assertSame(count($values), count($perms));
+        foreach($perms as $perm){
+            $this->assertInstanceOf('Ace\Perm\Perm', $perm);
+        }
+    }
+
+    /**
+    * @dataProvider getPermValues
+    */
+    public function testGetForSubjectReturnsSinglePerm($values)
+    {
+        $rows = [];
+        foreach ($values as $value){
+            $rows[]= [
+                'subject' => $this->subject,
+                'object' => $this->object,
+                'value' => $value
+            ];
+        }
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getForSubject($this->subject);
+        $this->assertSame(1, count($perms));
+        $perm = current($perms);
+        $this->assertInstanceOf('Ace\Perm\Perm', $perm);
+        $this->assertSame(array_unique($values), $perm->all());
     }
 
     public function testUpdateRemovesAPerm()

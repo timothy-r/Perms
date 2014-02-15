@@ -35,7 +35,28 @@ class Store implements StoreInterface
 
     public function getForSubject($subject)
     {
-        return [];
+        $sql = "SELECT * FROM perm WHERE subject = ?";
+        $options = [$subject];
+        $results = $this->db->fetchAll($sql, $options);
+        
+        if (!count($results)){
+            throw new NotFoundException;
+        }
+
+        // construct multiple Perm class instances, 1 per unique object in 
+        $perms = [];
+        foreach ($results as $result) {
+            if (!isset($perms[$result['object']])){
+                $perms[$result['object']] = [];
+            }
+            $perms[$result['object']][$result['value']] = $result['value'];
+        }
+
+        $perm_objects = [];
+        foreach ($perms as $object => $perm){
+            $perm_objects []= new Perm($subject, $object, $perm);
+        }
+        return $perm_objects;
     }
 
     public function update(Perm $perm)
