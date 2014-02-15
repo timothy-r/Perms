@@ -36,12 +36,12 @@ class Store implements StoreInterface
         $table = 'perm';
         $types = ['text', 'text', 'text'];
         foreach ($perm->added() as $value){
-            $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject(), 'value' => $value];
+            $options = ['subject' => $perm->subject(), 'object' => $perm->object(), 'value' => $value];
             $result = $this->db->insert($table, $options, $types);
         }
 
         foreach ($perm->removed() as $value){
-            $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject(), 'value' => $value];
+            $options = ['subject' => $perm->subject(), 'object' => $perm->object(), 'value' => $value];
             $result = $this->db->delete($table, $options);
         }
         return true;
@@ -50,8 +50,8 @@ class Store implements StoreInterface
     public function remove(Perm $perm)
     {
         $table = 'perm';
-        $subject = $perm->getSubject();
-        $object = $perm->getObject();
+        $subject = $perm->subject();
+        $object = $perm->object();
         $options = ['subject' => $subject, 'object' => $object];
         $result = $this->db->delete($table, $options);
         // @todo test result

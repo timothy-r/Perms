@@ -38,12 +38,12 @@ class Perm
         }
     }
     
-    public function getSubject()
+    public function subject()
     {
         return $this->subject;
     }
 
-    public function getObject()
+    public function object()
     {
         return $this->object;
     }
