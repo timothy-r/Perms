@@ -8,6 +8,8 @@ use Doctrine\DBAL\Connection;
 class Store implements StoreInterface
 {
     private $db;
+    
+    private $table = 'perm';
 
     public function __construct(Connection $db)
     {
@@ -33,31 +35,28 @@ class Store implements StoreInterface
 
     public function getForSubject($subject)
     {
+        return [];
     }
 
     public function update(Perm $perm)
     {
-        $table = 'perm';
         $types = ['text', 'text', 'text'];
         foreach ($perm->added() as $value){
             $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject(), 'value' => $value];
-            $result = $this->db->insert($table, $options, $types);
+            $result = $this->db->insert($this->table, $options, $types);
         }
 
         foreach ($perm->removed() as $value){
             $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject(), 'value' => $value];
-            $result = $this->db->delete($table, $options);
+            $result = $this->db->delete($this->table, $options);
         }
         return true;
     }
 
     public function remove(Perm $perm)
     {
-        $table = 'perm';
-        $subject = $perm->getSubject();
-        $object = $perm->getObject();
-        $options = ['subject' => $subject, 'object' => $object];
-        $result = $this->db->delete($table, $options);
+        $options = ['subject' => $perm->getSubject(), 'object' => $perm->getObject()];
+        $result = $this->db->delete($this->table, $options);
         // @todo test result
         return true;
     }
