@@ -31,7 +31,7 @@ $app->get('/subject/{subject}',
 function(Application $app, $subject) use ($store) {
     // obtain perms from storage, keyed by subject 
     try {
-        $perm_instances = $store->getForSubject($subject);
+        $perm_instances = $store->getAllForSubject($subject);
         $data = [];
         foreach ($perm_instances as $perm_instance){
             $data []= ['perms' => $perm_instance->all(), 'subject' => $subject, 'object' => $perm_instance->object()];

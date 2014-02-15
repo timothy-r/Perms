@@ -85,7 +85,7 @@ class StoreTest extends UnitTest
         
         $store = new Store($this->mock_db);
 
-        $perms = $store->getForSubject($this->subject);
+        $perms = $store->getAllForSubject($this->subject);
     }
 
     /**
@@ -109,7 +109,7 @@ class StoreTest extends UnitTest
         
         $store = new Store($this->mock_db);
 
-        $perms = $store->getForSubject($this->subject);
+        $perms = $store->getAllForSubject($this->subject);
         $this->assertSame(count($values), count($perms));
         foreach($perms as $perm){
             $this->assertInstanceOf('Ace\Perm\Perm', $perm);
@@ -137,7 +137,7 @@ class StoreTest extends UnitTest
         
         $store = new Store($this->mock_db);
 
-        $perms = $store->getForSubject($this->subject);
+        $perms = $store->getAllForSubject($this->subject);
         $this->assertSame(1, count($perms));
         $perm = current($perms);
         $this->assertInstanceOf('Ace\Perm\Perm', $perm);

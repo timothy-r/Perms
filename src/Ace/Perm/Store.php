@@ -33,7 +33,7 @@ class Store implements StoreInterface
         return $perm;
     }
 
-    public function getForSubject($subject)
+    public function getAllForSubject($subject)
     {
         $sql = "SELECT * FROM perm WHERE subject = ?";
         $options = [$subject];
