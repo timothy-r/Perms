@@ -8,25 +8,27 @@ use Ace\Perm\Perm;
 interface StoreInterface
 {
     /**
-    * get all perm names for this Subject Object pair
+    * get the Perm instance for this Subject Object pair
     * @return Ace\Perm\Perm
     */
     public function get($subject, $object);
     
     /**
-    * Get all Perms for this Subject
+    * Get all Perm instances for this Subject
     * @return array of Ace\Perm\Perm instances
     */
     public function getForSubject($subject);
 
     /**
     * Stores Perm's state
+    * adds any added perm names
+    * removes any removed perm names
     */
     public function update(Perm $perm);
 
     /**
-    * Removes perm from the Subject Object pair
-    * @todo this should remove all perm values for the Perm instance
+    * Removes the Perm instance from the store 
+    * ie. remove all perm names for a Subject Object pair
     */
     public function remove(Perm $perm);
 }
