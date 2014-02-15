@@ -44,7 +44,7 @@ function(Application $app, $subject) use ($store) {
         return new Response('',404);
     }
 });
-/*
+
 $app->get('/subject/{subject}/{perm}', 
 function(Application $app, $subject, $perm) use ($store) {
     // obtain perms from storage, keyed by subject 
@@ -59,7 +59,6 @@ function(Application $app, $subject, $perm) use ($store) {
         return new Response('',404);
     }
 });
-*/
 
 /**
 * Get all perms for Subject Object pair

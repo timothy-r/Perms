@@ -48,7 +48,7 @@ class GetPermTest extends WebTestCase
          $this->assertSame(201, $this->client->getResponse()->getStatusCode());
     }
 
-    public function testPutPermSucceedsMultipleTimes()
+    public function testPutPermSucceedsEveryTimeItIsCalled()
     {
          $crawler = $this->client->request('PUT', "{$this->base_url}/write");
          $this->assertSame(201, $this->client->getResponse()->getStatusCode());
@@ -107,6 +107,19 @@ class GetPermTest extends WebTestCase
     {
          $crawler = $this->client->request('PUT', "{$this->base_url}/read");
          $crawler = $this->client->request('GET', "/subject/{$this->subject}");
+         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    public function testGetAllForSubjectWithPermReturns404IfSubjectIsMissing()
+    {
+         $crawler = $this->client->request('GET', "/subject/1010/admin");
+         $this->assertSame(404, $this->client->getResponse()->getStatusCode());
+    }
+    
+    public function testGetAllForSubjectWithPermReturns200ForExistingSubject()
+    {
+         $crawler = $this->client->request('PUT', "{$this->base_url}/read");
+         $crawler = $this->client->request('GET', "/subject/{$this->subject}/read");
          $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 }
