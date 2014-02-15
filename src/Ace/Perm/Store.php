@@ -36,26 +36,15 @@ class Store implements StoreInterface
         $sql = "SELECT * FROM perm WHERE subject = ?";
         $options = [$subject];
         $results = $this->fetchAll($sql, $options);
-
-        // construct multiple Perm class instances, 1 per unique object in 
-        $perms = [];
-        foreach ($results as $result) {
-            if (!isset($perms[$result['object']])){
-                $perms[$result['object']] = [];
-            }
-            $perms[$result['object']][$result['value']] = $result['value'];
-        }
-
-        $perm_objects = [];
-        foreach ($perms as $object => $perm){
-            $perm_objects []= new Perm($subject, $object, $perm);
-        }
-        return $perm_objects;
+        return $this->resultsToPerms($results);
     }
 
     public function getAllForSubjectWithPerm($subject, $perm)
     {
-
+        $sql = "SELECT * FROM perm WHERE subject = ? AND value = ?";
+        $options = [$subject, $perm];
+        $results = $this->fetchAll($sql, $options);
+        return $this->resultsToPerms($results);
     }
 
     public function update(Perm $perm)
@@ -89,5 +78,27 @@ class Store implements StoreInterface
             throw new NotFoundException;
         }
         return $results;
+    }
+
+    private function resultsToPerms($results)
+    {
+        $perms = [];
+        foreach ($results as $result) {
+            if (!isset($perms[$result['subject']])){
+                $perms[$result['subject']] = [];
+            }
+            if (!isset($perms[$result['subject']][$result['object']])){
+                $perms[$result['subject']][$result['object']] = [];
+            }
+            $perms[$result['subject']][$result['object']][$result['value']] = $result['value'];
+        }
+
+        $perm_objects = [];
+        foreach ($perms as $subject => $perm){
+            foreach ($perm as $object => $values){
+                $perm_objects []= new Perm($subject, $object, $values);
+            }
+        }
+        return $perm_objects;
     }
 }

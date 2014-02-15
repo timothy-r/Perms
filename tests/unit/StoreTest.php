@@ -144,6 +144,69 @@ class StoreTest extends UnitTest
         $this->assertSame(array_unique($values), $perm->all());
     }
 
+    /**
+    * @expectedException Ace\Perm\NotFoundException
+    */
+    public function testGetAllForSubjectWithPermThrowsExceptionForMissingSubject()
+    {
+        $perm = 'admin';
+        $rows = [];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ? AND value = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForSubjectWithPerm($this->subject, $perm);
+    }
+
+    public function testGetAllForSubjectWithPermReturnsSinglePerm()
+    {
+        $value = 'admin';
+        $rows = [];
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject, 'value' => $value];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ? AND value = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForSubjectWithPerm($this->subject, $value);
+        $this->assertSame(1, count($perms));
+        $perm = current($perms);
+        $this->assertTrue($perm->has($value));
+    }
+
+    public function testGetAllForSubjectWithPermReturnsMultiplePerms()
+    {
+        $value = 'admin';
+        $rows = [];
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject, 'value' => $value];
+        // intentionally return the same data in two rows to test for de-duplication
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject, 'value' => $value];
+        $rows[] = ['object' => $this->object . '-' . rand(1,100000), 'subject' => $this->subject, 'value' => $value];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE subject = ? AND value = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForSubjectWithPerm($this->subject, $value);
+        $this->assertSame(2, count($perms));
+        foreach($perms as $perm){
+            $this->assertTrue($perm->has($value));
+        }
+    }
+
     public function testUpdateRemovesAPerm()
     {
         $value = 'write';
