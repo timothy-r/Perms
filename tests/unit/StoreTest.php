@@ -51,7 +51,6 @@ class StoreTest extends UnitTest
         $expected = array_unique($values);
         $this->assertSame($expected, $perm->allPerms());
     }
-
     
     /**
     * @expectedException Ace\Perm\NotFoundException
@@ -69,6 +68,18 @@ class StoreTest extends UnitTest
         $store = new Store($this->mock_db);
 
         $perm = $store->get($this->subject, $this->object);
+    }
+    
+    public function testGetForSubjectReturnsArrayOfPerms()
+    {
+        $subject = 'https://accounts.com/user-id-302';
+        $this->givenAMockDb();
+        $store = new Store($this->mock_db);
+        $perms = $store->getForSubject($subject);
+        $this->assertTrue(is_array($perms));
+        foreach($perms as $perm){
+            $this->assertInstanceOf('Ace\Perm\Perm', $perm);
+        }
     }
 
     public function testUpdateRemovesAPerm()
