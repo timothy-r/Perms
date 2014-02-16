@@ -10,6 +10,8 @@ branches:
 before_script: 
     - composer self-update
     - composer install
+    - mkdir data
+    - touch data/app.db
 
 script: ./vendor/bin/phpunit -c phpunit.xml 
 
