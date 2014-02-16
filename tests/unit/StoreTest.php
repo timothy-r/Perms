@@ -207,6 +207,52 @@ class StoreTest extends UnitTest
         }
     }
 
+    /**
+    * @expectedException Ace\Perm\NotFoundException
+    */
+    public function testGetForObjectThrowsExceptionForMissingSubject()
+    {
+        $rows = [];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE object = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForObject($this->object);
+    }
+
+    /**
+    * @dataProvider getPermValues
+    */
+    public function testGetForObjectReturnsMultiplePerms($values)
+    {
+        $rows = [];
+        foreach ($values as $value){
+            $rows[]= [
+                'subject' => $this->subject . '-' . rand(1,100000),
+                'object' => $this->object, 
+                'value' => $value
+            ];
+        }
+        $expected_sql = 
+            "SELECT * FROM perm WHERE object = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForObject($this->object);
+        $this->assertSame(count($values), count($perms));
+        foreach($perms as $perm){
+            $this->assertInstanceOf('Ace\Perm\Perm', $perm);
+        }
+    }
+
     public function testUpdateRemovesAPerm()
     {
         $value = 'write';

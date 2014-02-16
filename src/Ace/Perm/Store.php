@@ -21,14 +21,8 @@ class Store implements StoreInterface
         $sql = "SELECT * FROM perm WHERE subject = ? AND object = ?";
         $options = [$subject, $object];
         $results = $this->fetchAll($sql, $options);
-
-        $perms = [];
-        foreach($results as $result){
-            // remove any duplicates
-            $perms [$result['value']]= $result['value'];
-        }
-        $perm = new Perm($subject, $object, $perms);
-        return $perm;
+        $perms = $this->resultsToPerms($results);
+        return current($perms);
     }
 
     public function getAllForSubject($subject)
@@ -43,6 +37,14 @@ class Store implements StoreInterface
     {
         $sql = "SELECT * FROM perm WHERE subject = ? AND value = ?";
         $options = [$subject, $perm];
+        $results = $this->fetchAll($sql, $options);
+        return $this->resultsToPerms($results);
+    }
+
+    public function getAllForObject($object)
+    {
+        $sql = "SELECT * FROM perm WHERE object = ?";
+        $options = [$object];
         $results = $this->fetchAll($sql, $options);
         return $this->resultsToPerms($results);
     }
