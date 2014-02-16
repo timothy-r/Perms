@@ -64,6 +64,24 @@ function(Application $app, $subject, $perm) use ($store) {
 });
 
 /**
+* Get all Perms for Object
+*/
+$app->get('/object/{object}', 
+function(Application $app, $object) use ($store) {
+    // obtain perms from storage, keyed by object 
+    try {
+        $perm_instances = $store->getAllForObject($object);
+        $data = [];
+        foreach ($perm_instances as $perm_instance){
+            $data []= ['perms' => $perm_instance->all(), 'object' => $object, 'subject' => $perm_instance->subject()];
+        }
+        return $app->json($data);
+    } catch (NotFoundException $ex){
+        return new Response('',404);
+    }
+});
+
+/**
 * Get all perms for Subject Object pair
 */
 $app->get('/subject/{subject}/object/{object}', 
