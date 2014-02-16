@@ -45,6 +45,9 @@ function(Application $app, $subject) use ($store) {
     }
 });
 
+/**
+* Get all Subject Object pairs with this Subject and Perm
+*/
 $app->get('/subject/{subject}/{perm}', 
 function(Application $app, $subject, $perm) use ($store) {
     // obtain perms from storage, keyed by subject 
