@@ -12,6 +12,7 @@ before_script:
     - composer install
     - mkdir data
     - touch data/app.db
+    - sqlite data/app.db < tools/db-init.sql
 
 script: ./vendor/bin/phpunit -c phpunit.xml 
 
