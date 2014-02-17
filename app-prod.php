@@ -1,6 +1,6 @@
 <?php
 
 $debug = false;
-$environment = 'dev';
+$environment = 'prod';
 
 return require(__DIR__.'/app.php');
