@@ -10,7 +10,7 @@ use Ace\Perm\Store;
 use Ace\Perm\Perm;
 use Ace\Perm\NotFoundException;
 
-$debug = true;
+$debug = false;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -29,7 +29,7 @@ $app['debug'] = $debug;
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver'   => 'pdo_sqlite',
-        'path'     => __DIR__.'/data/app.db',
+        'path'     => __DIR__.'/data/dev.db',
     ],
 ]);
 

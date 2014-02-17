@@ -26,7 +26,7 @@ class GetPermTest extends WebTestCase
 
     public function createApplication()
     {
-        return require __DIR__ . '/../../app.php';
+        return require __DIR__ . '/../../app-test.php';
     }
 
     public function testGetPermFailsForMissingPerm()

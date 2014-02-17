@@ -10,9 +10,7 @@ branches:
 before_script: 
     - composer self-update
     - composer install
-    - mkdir data
-    - touch data/app.db
-    - sqlite3 data/app.db < tools/db-init.sql
+    - ./tools/db-init.sh
 
 script: ./vendor/bin/phpunit -c phpunit.xml 
 
