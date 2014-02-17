@@ -12,6 +12,9 @@ require_once __DIR__ . '/vendor/autoload.php';
 $app = new Application;
 $app['debug'] = true;
 
+/**
+* @todo configure different databases in testing versus development and production
+*/
 $app->register(new Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
         'driver'   => 'pdo_sqlite',
