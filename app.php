@@ -3,11 +3,16 @@
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Debug\ErrorHandler;
+
 use Ace\Perm\Store;
 use Ace\Perm\Perm;
 use Ace\Perm\NotFoundException;
 
 require_once __DIR__ . '/vendor/autoload.php';
+
+// register to convert errors into Exceptions
+ErrorHandler::register();
 
 $app = new Application;
 $app['debug'] = true;
