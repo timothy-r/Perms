@@ -49,6 +49,14 @@ class Store implements StoreInterface
         return $this->resultsToPerms($results);
     }
 
+    public function getAllForObjectWithPerm($object, $perm)
+    {
+        $sql = "SELECT * FROM perm WHERE object = ? AND value = ?";
+        $options = [$object, $perm];
+        $results = $this->fetchAll($sql, $options);
+        return $this->resultsToPerms($results);
+    }
+
     public function update(Perm $perm)
     {
         $types = ['text', 'text', 'text'];

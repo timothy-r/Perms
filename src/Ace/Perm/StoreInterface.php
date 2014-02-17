@@ -32,6 +32,12 @@ interface StoreInterface
     public function getAllForObject($object);
 
     /**
+    * Get all Perm instances for this Object which contain perm name
+    * @return array of Ace\Perm\Perm instances
+    */
+    public function getAllForObjectWithPerm($object, $perm);
+
+    /**
     * Stores Perm's state
     * adds any added perm names
     * removes any removed perm names

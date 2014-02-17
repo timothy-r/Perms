@@ -253,6 +253,69 @@ class StoreTest extends UnitTest
         }
     }
 
+    /**
+    * @expectedException Ace\Perm\NotFoundException
+    */
+    public function testGetAllForObjectWithPermThrowsExceptionForMissingObject()
+    {
+        $perm = 'admin';
+        $rows = [];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE object = ? AND value = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForObjectWithPerm($this->object, $perm);
+    }
+
+    public function testGetAllForObjectWithPermReturnsSinglePerm()
+    {
+        $value = 'admin';
+        $rows = [];
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject, 'value' => $value];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE object = ? AND value = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForObjectWithPerm($this->object, $value);
+        $this->assertSame(1, count($perms));
+        $perm = current($perms);
+        $this->assertTrue($perm->has($value));
+    }
+
+    public function testGetAllForObjectWithPermReturnsMultiplePerms()
+    {
+        $value = 'admin';
+        $rows = [];
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject, 'value' => $value];
+        // intentionally return the same data in two rows to test for de-duplication
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject, 'value' => $value];
+        $rows[] = ['object' => $this->object, 'subject' => $this->subject . '-' .rand(1,100000), 'value' => $value];
+
+        $expected_sql = 
+            "SELECT * FROM perm WHERE object = ? AND value = ?";
+        
+        $this->givenAMockDb();
+        $this->whenDbContains($expected_sql, $rows);
+        
+        $store = new Store($this->mock_db);
+
+        $perms = $store->getAllForObjectWithPerm($this->object, $value);
+        $this->assertSame(2, count($perms));
+        foreach($perms as $perm){
+            $this->assertTrue($perm->has($value));
+        }
+    }
+
     public function testUpdateRemovesAPerm()
     {
         $value = 'write';
