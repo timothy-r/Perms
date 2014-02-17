@@ -135,4 +135,18 @@ class GetPermTest extends WebTestCase
          $crawler = $this->client->request('GET', "/object/{$this->object}");
          $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
+
+    public function testGetAllForObjectWithPermReturns404IfObjectIsMissing()
+    {
+         $crawler = $this->client->request('GET', "/object/1010/admin");
+         $this->assertSame(404, $this->client->getResponse()->getStatusCode());
+    }
+    
+    public function testGetAllForObjectWithPermReturns200ForExistingObject()
+    {
+         $crawler = $this->client->request('PUT', "{$this->base_url}/read");
+         $crawler = $this->client->request('GET', "/object/{$this->object}/read");
+         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+    }
+    
 }
