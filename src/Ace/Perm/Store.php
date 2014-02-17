@@ -18,43 +18,28 @@ class Store implements StoreInterface
 
     public function get($subject, $object)
     {
-        $sql = "SELECT * FROM perm WHERE subject = ? AND object = ?";
-        $options = [$subject, $object];
-        $results = $this->fetchAll($sql, $options);
-        $perms = $this->resultsToPerms($results);
+        $perms = $this->fetchPerms($subject, $object);
         return current($perms);
     }
 
     public function getAllForSubject($subject)
     {
-        $sql = "SELECT * FROM perm WHERE subject = ?";
-        $options = [$subject];
-        $results = $this->fetchAll($sql, $options);
-        return $this->resultsToPerms($results);
+        return $this->fetchPerms($subject);
     }
 
     public function getAllForSubjectWithPerm($subject, $perm)
     {
-        $sql = "SELECT * FROM perm WHERE subject = ? AND value = ?";
-        $options = [$subject, $perm];
-        $results = $this->fetchAll($sql, $options);
-        return $this->resultsToPerms($results);
+        return $this->fetchPerms($subject, null, $perm);
     }
 
     public function getAllForObject($object)
     {
-        $sql = "SELECT * FROM perm WHERE object = ?";
-        $options = [$object];
-        $results = $this->fetchAll($sql, $options);
-        return $this->resultsToPerms($results);
+        return $this->fetchPerms(null, $object, null);
     }
 
     public function getAllForObjectWithPerm($object, $perm)
     {
-        $sql = "SELECT * FROM perm WHERE object = ? AND value = ?";
-        $options = [$object, $perm];
-        $results = $this->fetchAll($sql, $options);
-        return $this->resultsToPerms($results);
+        return $this->fetchPerms(null, $object, $perm);
     }
 
     public function update(Perm $perm)
@@ -80,14 +65,30 @@ class Store implements StoreInterface
         return true;
     }
 
-    private function fetchAll($sql, $options)
+    private function fetchPerms($subject = null, $object = null, $value = null)
     {
-        $results = $this->db->fetchAll($sql, $options);
-        
+        $results = $this->runQuery($subject, $object, $value); 
+
         if (!count($results)){
             throw new NotFoundException;
         }
-        return $results;
+        return $this->resultsToPerms($results);
+    }
+    
+    private function runQuery($subject, $object, $value)
+    {
+        $sql = [];
+        $options = [];
+        $vars = ['subject', 'object', 'value'];
+        foreach ($vars as $var) {
+            if (!is_null($$var)){
+                $sql []= "$var = ?";
+                $options []= $$var;
+            }
+        }
+
+        $sql_string = 'SELECT * FROM perm WHERE ' . implode(' AND ', $sql);
+        return $this->db->fetchAll($sql_string, $options);
     }
 
     private function resultsToPerms($results)
