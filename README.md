@@ -21,11 +21,21 @@ PUT /subject/{$id}/object/{$id}/{$perm}
 
 Sets the perm for this subject,object pair
 
+Example:
+* `curl -X PUT http://perms-store.net/subject/user:1/object/article:99/admin`
+* Response is a 200 or 201 for success
+* 500 for failure
+
 Test
 ----
 HEAD /subject/{$id}/object/{$id}/{$perm} 
 
 Tests if perm is set for the subject,object pair
+
+`curl -X HEAD http://perms-store.net/subject/user:1/object/article:99/admin`
+Response:
+* 200 if perm exists
+* 404 if perm does not exist
 
 Retrieve all 
 ------------
