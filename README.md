@@ -55,13 +55,34 @@ DELETE /subject/{$id}/object/{$id}
 
 Removes all perm names for the pair
 
-GET /subject/{$id} returns a json object containing all the objects and their perm names for the subject eg all things a user has any permission on 
-GET /subject/($id}/{$perm} returns a json object containing all the objects with this perm name for the subject, eg all things a user may admin 
-GET /object/{$id} returns a json object containing all the subjects and perm names for this object, eg all things a user has any perm on
-GET /object/{$id}/{$perm} returns a json object containing all the subjects with this perm name set for this object, eg all subjects who may read an issue
+Retrieve all the objects and perms for a subject
+------------------------------------------------
+GET /subject/{$id} 
+
+Returns a json object containing all the objects and their perm names for the subject eg all things a user has any permission on 
+
+Retrive all the objects for which a subject has a specific perm
+---------------------------------------------------------------
+GET /subject/($id}/{$perm} 
+
+Returns a json object containing all the objects with this perm name for the subject, eg all things a user may admin 
+
+Retrieve all the subjects and perms for an object
+-------------------------------------------------
+GET /object/{$id} 
+
+Returns a json object containing all the subjects and perm names for this object, eg all things a user has any perm on
+
+Retrieve all the subjects for an object which have a specific perm
+------------------------------------------------------------------
+GET /object/{$id}/{$perm} 
+
+Returns a json object containing all the subjects with this perm name set for this object, eg all subjects who may read an issue
 
 Benefits of this api over putting multiple perms in one request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
+
 This is a simple store, further perms functionality can be built on top of this with code that can filter the id strings? So get all perms and filter out the ones you don't want?  
+
 It would be better to offer a filter api to the perm store than ask clients to filter out unwanted results.
 
 How to get all issues a user may view?
@@ -70,6 +91,7 @@ Add a filter to the store
 GET /subject/($id}/view?object=issue
 
 Caching
+=======
 
 For the 4 simple endpoints which treat perms as individual resources a varnish cache can be configured to handle caching and purging correctly
 
