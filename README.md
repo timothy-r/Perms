@@ -15,66 +15,57 @@ Glossary:
 API
 ---
 
-Set a perm for a pair
+Set a perm 
 ---------------------
 PUT /subject/{$id}/object/{$id}/{$perm} 
 
-Sets the perm name for this pair
+Sets the perm for this pair
 
-Retrieve a single perm
-----------------------
+Test a single perm 
+---------------------------------
 
-GET/HEAD /subject/{$id}/object/{$id}/{$perm} 
+HEAD /subject/{$id}/object/{$id}/{$perm} 
 
-Tests if perm name is set for the pair
+Tests if perm is set for the pair
 
-Retrieve all perms for a pair
------------------------------
-
+Retrieve all perms
+------------------
 GET /subject/{$id}/object/{$id} 
 
 Returns a json object containing the perm names for this pair
 
-Retrieve all perms for a pair
------------------------------
-
-GET /subject/{$id}/object/{$id}/ 
-
-Get all perm names set for the pair
-
-Remove a single perm
+Remove a perm
 --------------------
 DELETE /subject/{$id}/object/{$id}/{$perm} 
 
-Removes perm name from this pair
+Removes perm from this pair
 
-Remove all perms for a pair
---------------------------
-
+Remove all perms
+----------------
 DELETE /subject/{$id}/object/{$id} 
 
 Removes all perm names for the pair
 
-Retrieve all the objects and perms for a subject
-------------------------------------------------
+Retrieve all for subject
+------------------------
 GET /subject/{$id} 
 
 Returns a json object containing all the objects and their perm names for the subject eg all things a user has any permission on 
 
-Retrive all the objects for which a subject has a specific perm
----------------------------------------------------------------
+Retrive all for subject with perm
+---------------------------------
 GET /subject/($id}/{$perm} 
 
 Returns a json object containing all the objects with this perm name for the subject, eg all things a user may admin 
 
-Retrieve all the subjects and perms for an object
--------------------------------------------------
+Retrieve all for object
+-----------------------
 GET /object/{$id} 
 
 Returns a json object containing all the subjects and perm names for this object, eg all things a user has any perm on
 
-Retrieve all the subjects for an object which have a specific perm
-------------------------------------------------------------------
+Retrieve all for object with perm
+---------------------------------
 GET /object/{$id}/{$perm} 
 
 Returns a json object containing all the subjects with this perm name set for this object, eg all subjects who may read an issue
