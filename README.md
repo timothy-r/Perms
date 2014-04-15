@@ -6,42 +6,54 @@ Permissions store
 A permissions store service which stores permission keys, eg. read, write, admin for subject, object pairs. The store allows associating any arbitrary keys with a pair of opaque identifier strings.
 
 Glossary:
-* Subject is a User or UserGroup, the identifiers are opaque to the store and need to be unique for all its clients
-* Object is a bug tracker issue or article, the identifiers are opaque to the store and need to be unique for all its clients
-* Perm is a string, the perm store simply stores these values, the clients give them meaning
+* **Subject** is a User or UserGroup, the identifiers are opaque to the store and need to be unique for all its clients
+* **Object** is a bug tracker issue or article, the identifiers are opaque to the store and need to be unique for all its clients
+* **Perm** is a string, the perm store simply stores these values, the clients give them meaning
 
 *In the uri examples the id parameters contain type and id information, subject and object are literals.*
 
 API
 ---
 
-Create
-------
-PUT /subject/{$id}/object/{$id}/{$perm} sets the perm name for this pair
+Set a perm for a pair
+---------------------
+PUT /subject/{$id}/object/{$id}/{$perm} 
+
+Sets the perm name for this pair
 
 Retrieve a single perm
 ----------------------
 
-GET/HEAD /subject/{$id}/object/{$id}/{$perm} tests if perm name is set for the pair
+GET/HEAD /subject/{$id}/object/{$id}/{$perm} 
+
+Tests if perm name is set for the pair
 
 Retrieve all perms for a pair
 -----------------------------
 
-GET /subject/{$id}/object/{$id} returns a json object containing the perm names for this pair
+GET /subject/{$id}/object/{$id} 
+
+Returns a json object containing the perm names for this pair
 
 Retrieve all perms for a pair
 -----------------------------
 
-GET /subject/{$id}/object/{$id}/ get all perm names set for the pair
+GET /subject/{$id}/object/{$id}/ 
+
+Get all perm names set for the pair
 
 Remove a single perm
 --------------------
-DELETE /subject/{$id}/object/{$id}/{$perm} removes perm name from this pair
+DELETE /subject/{$id}/object/{$id}/{$perm} 
+
+Removes perm name from this pair
 
 Remove all perms for a pair
 --------------------------
 
-DELETE /subject/{$id}/object/{$id} removes all perm names for the pair
+DELETE /subject/{$id}/object/{$id} 
+
+Removes all perm names for the pair
 
 GET /subject/{$id} returns a json object containing all the objects and their perm names for the subject eg all things a user has any permission on 
 GET /subject/($id}/{$perm} returns a json object containing all the objects with this perm name for the subject, eg all things a user may admin 
