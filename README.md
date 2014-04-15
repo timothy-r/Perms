@@ -1,16 +1,19 @@
-API for the permissions store
+Permissions store
 =============================
 
 [![Build Status](https://travis-ci.org/timothy-r/Perms.png?branch=master)](https://travis-ci.org/timothy-r/Perms)
 
+A permissions store service which stores permission keys, eg. read, write, admin for subject, object pairs. The store allows associating any arbitrary keys with a pair of opaque identifier strings.
+
+Glossary:
+* Subjects are Users or UserGroups, the identifiers are opaque to the store and need to be unique for all its clients
+* Objects are Issues or Articles, the identifiers are opaque to the store and need to be unique for all its clients
+* Perms are strings, the perm store simply stores these values, the clients give them meaning
+
+*In the uri examples the id parameters contain type and id information, subject and object are literals.*
+
 API
-===
-
-The id parameters contain type and id information, subject and object are literals
-
-Subjects are Users or UserGroups, the identifiers are opaque to the store and need to be unique for all its clients
-Objects are Issues or Articles, the identifiers are opaque to the store and need to be unique for all its clients
-Perms are strings, the perm store simply stores these values, the clients give them meaning
+---
 
 PUT /subject/{$id}/object/{$id}/{$perm} sets the perm name for this pair
 GET/HEAD /subject/{$id}/object/{$id}/{$perm} tests if perm name is set for the pair
