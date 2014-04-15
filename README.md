@@ -25,7 +25,6 @@ Sets the *admin* perm for *user 1* on *article 99*
 
 Response:
 * 200 or 201 for success
-* 500 for failure
 
 Test
 ----
@@ -37,6 +36,18 @@ Test if *user 1* may *read* *article 99*
 
 Response:
 * 200 if perm exists
+* 404 if perm does not exist
+
+Retrieve
+--------
+GET /subject/{$id}/object/{$id}/{$perm} 
+
+Test if *user 1* may *read* *article 99*
+
+`curl -X GET http://perms-store.net/subject/user:1/object/article:99/read`
+
+Response:
+* 200 and {"subject":"user:1","object":"article:99"}
 * 404 if perm does not exist
 
 Retrieve all 
@@ -120,36 +131,43 @@ Response:
 Discussion
 ==========
 
-Benefits of this api over putting multiple perms in one request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
+Benefits
+--------
 
-This is a simple store, further perms functionality can be built on top of this with code that can filter the id strings? So get all perms and filter out the ones you don't want?  
+Benefits of this api over putting multiple perms in a single request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
+
+This is a simple store api, further perms functionality can be built on top of this with code that can filter the id strings.
 
 It would be better to offer a filter api to the perm store than ask clients to filter out unwanted results.
 
-How to get all issues a user may view?
-Can only get all things a user may view and filter out non-issues...
-Add a filter to the store
-GET /subject/($id}/view?object=issue
+Missing functionality
+---------------------
+
+Since the store treats the subject and object identifiers as opaque strings we can't obtain all the objects of type article which user:1 has read permission on. Clients will need to retrieve all objects that user:1 has read perm on and then filter out ones that are not articles. If all article identifiers contain the string 'article' then we could add a filter interface to do this in the server not the client.
+
+`curl -X GET http://perm-store.net/subject/user:1/view?object=article`
+
+In the store service it could use the object query parameter as a wild card match on the object identifier string.
 
 Caching
 =======
 
-For the 4 simple endpoints which treat perms as individual resources a varnish cache can be configured to handle caching and purging correctly
+How well can this api be cached by a HTTP cache such as varnish?
 
-PUT /subject/{$id}/object/{$id}/{$perm} 
-HEAD /subject/{$id}/object/{$id}/{$perm}
-GET /subject/{$id}/object/{$id}/{$perm}
-DELETE /subject/{$id}/object/{$id}/{$perm}
+For the 3 simple endpoints which treat perms as individual resources a varnish cache can be configured to handle caching and purging correctly on its own without any intervention from the perms service application.
 
-Implementing these endpoints requires the perms store to purge the cache programmatically
+* PUT /subject/{$id}/object/{$id}/{$perm} 
+* HEAD /subject/{$id}/object/{$id}/{$perm}
+* GET /subject/{$id}/object/{$id}/{$perm}
+* DELETE /subject/{$id}/object/{$id}/{$perm}
 
-DELETE /subject/{$id}/object/{$id} 
-GET /subject/{$id}/object/{$id} // get multiple perms in one request
-PUT /subject/{$id}/object/{$id} // set muliple perms in one request
+Implementing these endpoints will require the perms store to purge the cache programmatically
 
-GET /subject/{$id} 
-GET /subject/($id}/{$perm} 
-GET /object/{$id} 
-GET /object/{$id}/{$perm} 
+* GET /subject/{$id}/object/{$id}
+* DELETE /subject/{$id}/object/{$id} 
 
+* GET /subject/{$id} 
+* GET /subject/($id}/{$perm} 
+* GET /object/{$id} 
+* GET /object/{$id}/{$perm} 
 
