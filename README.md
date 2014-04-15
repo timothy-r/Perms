@@ -30,9 +30,10 @@ Test
 ----
 HEAD /subject/{$id}/object/{$id}/{$perm} 
 
-Tests if perm is set for the subject,object pair
+Test if *user 1* may *read* *article 99**
 
-`curl -X HEAD http://perms-store.net/subject/user:1/object/article:99/admin`
+`curl -X HEAD http://perms-store.net/subject/user:1/object/article:99/read`
+
 Response:
 * 200 if perm exists
 * 404 if perm does not exist
