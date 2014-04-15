@@ -48,7 +48,7 @@ Get all the perms *user 1* has on *article 99*
 `curl -X GET http://perms-store.net/subject/user:1/object/article:99`
 
 Response:
-* 200 and ["read", "write", "admin"] for success
+* 200 and {"perms":["read"],"subject":"user:1","object":"article:99"} for success
 * 404 when no perms exist
 
 Remove 
@@ -66,31 +66,59 @@ Remove all
 ----------
 DELETE /subject/{$id}/object/{$id} 
 
-Removes all perm names for the subject,object pair
+Removes all perms from *user 1* on *article 99*
+
+`curl -X DELETE http://perms-store.net/subject/user:1/object/article:99`
+
+Response:
+* 200 if successfully removed
 
 Retrieve all for subject
 ------------------------
 GET /subject/{$id} 
 
-Returns a json object containing all the objects and their perm names for the subject eg all things a user has any permission on 
+Get a json object containing all the *objects* and their associated perms for *user 1*
 
-Retrive all for subject with perm
+`curl -X GET http://perm-store.net/subject/user:1`
+
+Response:
+* 200 and [{"perms":["read"],"subject":"user:1","object":"article:99"},{"perms":["write"],"subject":"user:1","object":"article:49"}]
+
+Retrieve all for subject with perm
 ---------------------------------
 GET /subject/($id}/{$perm} 
 
-Returns a json object containing all the objects with this perm name for the subject, eg all things a user may admin 
+Get a json object containing all the *objects* with admin perm for *user:1*
+
+`curl -X GET http://perm-store.net/subject/user:1/admin`
+
+Response:
+* 200 and [{"subject":"user:1","object":"article:49"}]
 
 Retrieve all for object
 -----------------------
 GET /object/{$id} 
 
-Returns a json object containing all the subjects and perm names for this object, eg all things a user has any perm on
+Get a json object containing all the *subjects* and their associated perms for *article:99*
+
+`curl -X GET http://perm-store.net/object/article:99`
+
+Response:
+* 200 and [{"perms":["read"],"object":"article:99","subject":"user:1"}]
 
 Retrieve all for object with perm
 ---------------------------------
 GET /object/{$id}/{$perm} 
 
-Returns a json object containing all the subjects with this perm name set for this object, eg all subjects who may read an issue
+Get a json object containing all the *subjects* with write perm for *article:99*
+
+`curl -X GET http://perm-store.net/object/article:99/write`
+
+Response:
+* 200 and [{"object":"article:99","subject":"user:1"}]
+
+Discussion
+==========
 
 Benefits of this api over putting multiple perms in one request is that we don't need to test if the incoming object is fresh using ETags. Each request is atomic in that sense.
 
