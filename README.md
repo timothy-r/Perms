@@ -19,18 +19,19 @@ Set
 ---
 PUT /subject/{$id}/object/{$id}/{$perm} 
 
-Sets the perm for this subject,object pair
+Sets the *admin* perm for *user 1* on *article 99*
 
-Example:
-* `curl -X PUT http://perms-store.net/subject/user:1/object/article:99/admin`
-* Response is a 200 or 201 for success
+`curl -X PUT http://perms-store.net/subject/user:1/object/article:99/admin`
+
+Response:
+* 200 or 201 for success
 * 500 for failure
 
 Test
 ----
 HEAD /subject/{$id}/object/{$id}/{$perm} 
 
-Test if *user 1* may *read* *article 99**
+Test if *user 1* may *read* *article 99*
 
 `curl -X HEAD http://perms-store.net/subject/user:1/object/article:99/read`
 
@@ -42,13 +43,24 @@ Retrieve all
 ------------
 GET /subject/{$id}/object/{$id} 
 
-Returns a json object containing the perm names for this subject,object pair
+Get all the perms *user 1* has on *article 99*
+
+`curl -X GET http://perms-store.net/subject/user:1/object/article:99`
+
+Response:
+* 200 and ["read", "write", "admin"] for success
+* 404 when no perms exist
 
 Remove 
 ------
 DELETE /subject/{$id}/object/{$id}/{$perm} 
 
-Removes perm from this subject,object pair
+Removes *write* perms from *user 1* on *article 99*
+
+`curl -X DELETE http://perms-store.net/subject/user:1/object/article:99/write`
+
+Response:
+* 200 if successfully removed
 
 Remove all 
 ----------
