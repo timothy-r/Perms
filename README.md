@@ -15,36 +15,35 @@ Glossary:
 API
 ---
 
-Set a perm 
----------------------
+Set 
+---
 PUT /subject/{$id}/object/{$id}/{$perm} 
 
-Sets the perm for this pair
+Sets the perm for this subject,object pair
 
-Test a single perm 
----------------------------------
-
+Test
+----
 HEAD /subject/{$id}/object/{$id}/{$perm} 
 
-Tests if perm is set for the pair
+Tests if perm is set for the subject,object pair
 
-Retrieve all perms
-------------------
+Retrieve all 
+------------
 GET /subject/{$id}/object/{$id} 
 
-Returns a json object containing the perm names for this pair
+Returns a json object containing the perm names for this subject,object pair
 
-Remove a perm
---------------------
+Remove 
+------
 DELETE /subject/{$id}/object/{$id}/{$perm} 
 
-Removes perm from this pair
+Removes perm from this subject,object pair
 
-Remove all perms
-----------------
+Remove all 
+----------
 DELETE /subject/{$id}/object/{$id} 
 
-Removes all perm names for the pair
+Removes all perm names for the subject,object pair
 
 Retrieve all for subject
 ------------------------
