@@ -3,14 +3,14 @@ Permissions store
 
 [![Build Status](https://travis-ci.org/timothy-r/Perms.png?branch=master)](https://travis-ci.org/timothy-r/Perms)
 
-A permissions store service which stores permission keys, eg. read, write, admin for subject, object pairs. The store allows associating any arbitrary keys with a pair of opaque identifier strings.
+A permissions store service which stores permissions, eg. read, write, admin for subject and object pairs. 
 
 Glossary:
-* **Subject** is a User or UserGroup, the identifiers are opaque to the store and need to be unique for all its clients
-* **Object** is a bug tracker issue or article, the identifiers are opaque to the store and need to be unique for all its clients
-* **Perm** is a string, the perm store simply stores these values, the clients give them meaning
+* **Subject** is for exmaple a User or UserGroup, the identifiers are opaque to the store and need to be unique across all its clients
+* **Object** is for example a bug tracker issue or article, again the identifiers are opaque to the store and need to be unique across all its clients
+* **Perm** is a string, for example read or write, the perm store simply stores these values, the clients give them meaning
 
-*In the uri examples the id parameters contain type and id information, subject and object are literals.*
+*In the uri examples the id parameters contain identifiers, subject and object are literals.*
 
 API
 ---
@@ -71,7 +71,7 @@ Removes *write* perms from *user 1* on *article 99*
 `curl -X DELETE http://perms-store.net/subject/user:1/object/article:99/write`
 
 Response:
-* 200 if successfully removed
+* 200 if successfully removed, ie. the perm is no longer set
 
 Remove all 
 ----------
@@ -82,7 +82,7 @@ Removes all perms from *user 1* on *article 99*
 `curl -X DELETE http://perms-store.net/subject/user:1/object/article:99`
 
 Response:
-* 200 if successfully removed
+* 200 if successfully removed, ie. there are no perms set for this pair any longer
 
 Retrieve all for subject
 ------------------------
@@ -143,7 +143,7 @@ It would be better to offer a filter api to the perm store than ask clients to f
 Missing functionality
 ---------------------
 
-Since the store treats the subject and object identifiers as opaque strings we can't obtain all the objects of type article which user:1 has read permission on. Clients will need to retrieve all objects that user:1 has read perm on and then filter out ones that are not articles. If all article identifiers contain the string 'article' then we could add a filter interface to do this in the server not the client.
+Since the store treats the subject and object identifiers as opaque strings we can't obtain all the objects of type article which a subject has read permission on. Clients will need to retrieve all objects that a subject has the read perm on and then filter out ones that are not articles, since only the clients know what the identifers represent. If, for example, all article identifiers contain the string 'article' then we could add a filter interface to do this on the server not the client.
 
 `curl -X GET http://perm-store.net/subject/user:1/view?object=article`
 
@@ -161,13 +161,11 @@ For the 3 simple endpoints which treat perms as individual resources a varnish c
 * GET /subject/{$id}/object/{$id}/{$perm}
 * DELETE /subject/{$id}/object/{$id}/{$perm}
 
-Implementing these endpoints will require the perms store to purge the cache programmatically
+Implementing these endpoints will require the perms store to purge the cache programmatically.
 
 * GET /subject/{$id}/object/{$id}
 * DELETE /subject/{$id}/object/{$id} 
-
 * GET /subject/{$id} 
 * GET /subject/($id}/{$perm} 
 * GET /object/{$id} 
 * GET /object/{$id}/{$perm} 
-
