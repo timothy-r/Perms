@@ -11,6 +11,9 @@ use Ace\Perm\NotFoundException;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+$debug = isset($debug) ? $debug : false;
+$environment = isset($environment) ? $environment : 'prod';
+
 // register to convert errors into Exceptions
 ErrorHandler::register();
 

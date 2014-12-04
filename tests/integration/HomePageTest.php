@@ -8,7 +8,7 @@ class HomePageTest extends WebTestCase
     
     public function createApplication()
     {
-        return require __DIR__ . '/../../src/app-test.php';
+        return require __DIR__ . '/../../src/app.php';
     }
 
     public function testHomePageSuccess()
