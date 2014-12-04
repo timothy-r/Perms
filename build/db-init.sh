@@ -1,20 +1,20 @@
 #!/bin/bash
 
-mkdir data 2> /dev/null
+mkdir ../src/data 2> /dev/null
 
 # deletes and remakes database files
-rm data/test.db 2> /dev/null
-rm data/dev.db 2> /dev/null
-rm data/prod.db 2> /dev/null
+rm ../src/data/test.db 2> /dev/null
+rm ../src/data/dev.db 2> /dev/null
+rm ../src/data/prod.db 2> /dev/null
 
-touch data/test.db
-sqlite3 data/test.db < tools/db-init.sql
+touch ../src/data/test.db
+sqlite3 ../src/data/test.db < db-init.sql
 
-touch data/dev.db
-sqlite3 data/dev.db < tools/db-init.sql
+touch ../src/data/dev.db
+sqlite3 ../src/data/dev.db < db-init.sql
 
-touch data/prod.db
-sqlite3 data/prod.db < tools/db-init.sql
+touch ../src/data/prod.db
+sqlite3 ../src/data/prod.db < db-init.sql
 
-chmod 777 data
-chmod 666 data/*.db
+chmod 777 ../src/data
+chmod 666 ../src/data/*.db
