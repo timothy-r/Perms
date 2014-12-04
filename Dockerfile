@@ -16,10 +16,7 @@ RUN apt-get update -qq && apt-get -y install \
     php5-cli \
     php5-common \
     php5-fpm \
-    php5-mcrypt
-
-# Make the directories
-RUN mkdir /home/app /home/app/build /home/app/web /home/app/config
+    sqlite
 
 # Setup nginx
 COPY build/default /etc/nginx/sites-available/default
@@ -31,14 +28,16 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
 # Move files into place
-COPY web/ /home/app/web
-COPY composer.json /home/app/
-COPY composer.lock /home/app/
+COPY src/ /home/app/src
 COPY build/ /home/app/build
 
 # Install dependencies
-WORKDIR /home/app
+WORKDIR /home/app/src
 RUN composer install --prefer-dist
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
+
+WORKDIR /home/app/build
+
+RUN /home/app/build/db-init.sh
