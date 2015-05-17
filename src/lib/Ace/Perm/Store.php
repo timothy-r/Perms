@@ -42,24 +42,24 @@ class Store implements StoreInterface
         return $this->fetchPerms(null, $object, $perm);
     }
 
-    public function update(Perm $perm)
+    public function update($data)
     {
         $types = ['text', 'text', 'text'];
-        foreach ($perm->added() as $value){
-            $options = ['subject' => $perm->subject(), 'object' => $perm->object(), 'value' => $value];
+        foreach ($data->added() as $value){
+            $options = ['subject' => $data->subject(), 'object' => $data->object(), 'value' => $value];
             $result = $this->db->insert($this->table, $options, $types);
         }
 
-        foreach ($perm->removed() as $value){
-            $options = ['subject' => $perm->subject(), 'object' => $perm->object(), 'value' => $value];
+        foreach ($data->removed() as $value){
+            $options = ['subject' => $data->subject(), 'object' => $data->object(), 'value' => $value];
             $result = $this->db->delete($this->table, $options);
         }
         return true;
     }
 
-    public function remove(Perm $perm)
+    public function remove($data)
     {
-        $options = ['subject' => $perm->subject(), 'object' => $perm->object()];
+        $options = ['subject' => $data->subject(), 'object' => $data->object()];
         $result = $this->db->delete($this->table, $options);
         // @todo test result
         return true;

@@ -3,13 +3,13 @@
 use Ace\Perm\Perm;
 
 /**
-* @todo update to use the Perm class throughout
+ * The interface to get Perm instances by certain criteria
 */
 interface StoreInterface
 {
     /**
     * get the Perm instance for this Subject Object pair
-    * @return Ace\Perm\Perm
+    * @return \Ace\Perm\Perm
     */
     public function get($subject, $object);
     
@@ -38,15 +38,16 @@ interface StoreInterface
     public function getAllForObjectWithPerm($object, $perm);
 
     /**
-    * Stores Perm's state
+    * Updates store of Perm data
+     *
     * adds any added perm names
     * removes any removed perm names
     */
-    public function update(Perm $perm);
+    public function update($data);
 
     /**
     * Removes the Perm instance from the store 
     * ie. remove all perm names for a Subject Object pair
     */
-    public function remove(Perm $perm);
+    public function remove($data);
 }
