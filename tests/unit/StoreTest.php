@@ -4,15 +4,15 @@ use Ace\Perm\Store;
 use Ace\Perm\Perm;
 use Ace\Test\UnitTest;
 use Ace\Test\PermMockTrait;
+use Ace\Test\DbMockTrait;
 
 class StoreTest extends UnitTest
 {
     use PermMockTrait;
-    
+    use DbMockTrait;
+
     protected $subject = 'group:admins@accounts.com';
     protected $object = 'issue_33421@bugs.co.uk';
-
-    protected $mock_db;
 
     public function getPermValues()
     {
@@ -392,43 +392,5 @@ class StoreTest extends UnitTest
         $this->assertTrue($result);
     }
     
-    protected function givenAMockDb()
-    {
-        $this->mock_db = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
-    }
 
-    protected function whenDbContains($expected_sql, $rows)
-    {
-        $this->mock_db->expects($this->once())
-            ->method('fetchAll')
-            ->with($expected_sql)
-            ->will($this->returnValue($rows));
-    }
-
-    protected function whenDbExpectsInsert($table, $subject, $object, $perm)
-    {
-        $this->mock_db->expects($this->once())
-            ->method('insert')
-            ->with($table, ['subject' => $subject, 'object' => $object, 'value' => $perm]);
-    }
-
-    protected function whenDbDoesNotExpectInsert()
-    {
-        $this->mock_db->expects($this->never())
-            ->method('insert');
-    }
-
-    protected function whenDbExpectsDelete($table, $subject, $object, $perm)
-    {
-        $this->mock_db->expects($this->once())
-            ->method('delete')
-            ->with($table, ['subject' => $subject, 'object' => $object, 'value' => $perm]);
-    }
-
-    protected function whenDbExpectsDeleteAll($table, $subject, $object)
-    {
-        $this->mock_db->expects($this->once())
-            ->method('delete')
-            ->with($table, ['subject' => $subject, 'object' => $object]);
-    }
 }
