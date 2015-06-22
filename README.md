@@ -154,17 +154,17 @@ Caching
 
 How well can this api be cached by a HTTP cache such as varnish?
 
-For the 3 simple endpoints which treat perms as individual resources a varnish cache can be configured to handle caching and purging correctly on its own without any intervention from the perms service application.
+For the endpoints which treat perms as individual resources a varnish cache can be configured to handle caching and purging correctly on its own without any intervention from the perms service application.
 
 * PUT /subject/{$id}/object/{$id}/{$perm} 
 * HEAD /subject/{$id}/object/{$id}/{$perm}
 * GET /subject/{$id}/object/{$id}/{$perm}
 * DELETE /subject/{$id}/object/{$id}/{$perm}
-
-Implementing these endpoints will require the perms store to purge the cache programmatically.
-
 * GET /subject/{$id}/object/{$id}
 * DELETE /subject/{$id}/object/{$id} 
+
+Implementing these endpoints will require the perms store to purge an external cache programmatically. Varnish may be configurable to be able to do this with vcl when making a PUT or DELETE request, but the docs aren't that clear to me.
+
 * GET /subject/{$id} 
 * GET /subject/($id}/{$perm} 
 * GET /object/{$id} 
