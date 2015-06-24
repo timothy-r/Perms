@@ -49,15 +49,37 @@ class EventStore implements StoreInterface
     {
     }
 
-    private function fetchPerms($subject = null, $object = null, $value = null)
+    private function fetchPerms($subject = null, $object = null, $key = null)
     {
-    }
-    
-    private function runQuery($subject, $object, $value)
-    {
+        $events = $this->runQuery($subject, $object, $key);
+
+        if (!count($events)){
+            throw new NotFoundException;
+        }
+
+        return $this->eventsToPerms($events);
     }
 
-    private function resultsToPerms($results)
+    private function eventsToPerms($results)
     {
+
+    }
+
+    private function runQuery($subject, $object, $key)
+    {
+        $sql = [];
+        $options = [];
+        $vars = ['subject', 'object', 'key'];
+        foreach ($vars as $var) {
+            if (!is_null($$var)){
+                $sql []= "$var = ?";
+                $options []= $$var;
+            }
+        }
+
+        // order results by the time field so they can be iterated over in the order they happened
+        // (lowest timestamps first)
+        $sql_string = 'SELECT * FROM events WHERE ' . implode(' AND ', $sql) . ' ORDER BY time ASC';
+        return $this->db->fetchAll($sql_string, $options);
     }
 }
