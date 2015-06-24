@@ -1,14 +1,24 @@
-<?php namespace Ace\Perm;
+<?php namespace Ace\Perm\Store;
 
-use Ace\Perm\StoreInterface;
+use Ace\Perm\Store\StoreInterface;
 use Ace\Perm\Perm;
 use Ace\Perm\NotFoundException;
 use Doctrine\DBAL\Connection;
 
-class Store implements StoreInterface
+/**
+ * Class RDBMSStore
+ * @package Ace\Perm\Store
+ */
+class RDBMSStore implements StoreInterface
 {
+    /**
+     * @var Connection
+     */
     private $db;
-    
+
+    /**
+     * @var string
+     */
     private $table = 'perm';
 
     public function __construct(Connection $db)

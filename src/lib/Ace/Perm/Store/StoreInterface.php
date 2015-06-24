@@ -1,4 +1,4 @@
-<?php namespace Ace\Perm;
+<?php namespace Ace\Perm\Store;
 
 use Ace\Perm\Perm;
 

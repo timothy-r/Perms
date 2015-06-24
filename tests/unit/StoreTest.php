@@ -1,6 +1,6 @@
 <?php
 
-use Ace\Perm\Store;
+use Ace\Perm\Store\RDBMSStore;
 use Ace\Perm\Perm;
 use Ace\Test\UnitTest;
 use Ace\Test\PermMockTrait;
@@ -43,7 +43,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perm = $store->get($this->subject, $this->object);
         $this->assertInstanceOf('Ace\Perm\Perm', $perm);
@@ -65,7 +65,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perm = $store->get($this->subject, $this->object);
     }
@@ -83,7 +83,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForSubject($this->subject);
     }
@@ -107,7 +107,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForSubject($this->subject);
         $this->assertSame(count($values), count($perms));
@@ -135,7 +135,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForSubject($this->subject);
         $this->assertSame(1, count($perms));
@@ -158,7 +158,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForSubjectWithPerm($this->subject, $perm);
     }
@@ -175,7 +175,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForSubjectWithPerm($this->subject, $value);
         $this->assertSame(1, count($perms));
@@ -198,7 +198,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForSubjectWithPerm($this->subject, $value);
         $this->assertSame(2, count($perms));
@@ -220,7 +220,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForObject($this->object);
     }
@@ -244,7 +244,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForObject($this->object);
         $this->assertSame(count($values), count($perms));
@@ -267,7 +267,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForObjectWithPerm($this->object, $perm);
     }
@@ -284,7 +284,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForObjectWithPerm($this->object, $value);
         $this->assertSame(1, count($perms));
@@ -307,7 +307,7 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbContains($expected_sql, $rows);
         
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
 
         $perms = $store->getAllForObjectWithPerm($this->object, $value);
         $this->assertSame(2, count($perms));
@@ -329,7 +329,7 @@ class StoreTest extends UnitTest
             ->method('removed')
             ->will($this->returnValue([$value]));
 
-        $store = new Store($this->mock_db);
+        $store = new RDBMSStore($this->mock_db);
         $result = $store->update($this->mock_perm);
         $this->assertTrue($result);
     }
@@ -340,7 +340,8 @@ class StoreTest extends UnitTest
         $table = 'perm';
         $this->givenAMockDb();
         $this->whenDbExpectsInsert($table, $this->subject, $this->object, $value);
-        $store = new Store($this->mock_db);
+
+        $store = new RDBMSStore($this->mock_db);
         $perm = new Perm($this->subject, $this->object);
         $perm->add($value);
 
@@ -353,7 +354,8 @@ class StoreTest extends UnitTest
     {
         $this->givenAMockDb();
         $this->whenDbDoesNotExpectInsert();
-        $store = new Store($this->mock_db);
+
+        $store = new RDBMSStore($this->mock_db);
         $perm = new Perm($this->subject, $this->object);
 
         $result = $store->update($perm);
@@ -368,7 +370,8 @@ class StoreTest extends UnitTest
         $this->givenAMockDb();
         $this->whenDbDoesNotExpectInsert();
         $this->whenDbExpectsDelete($table, $this->subject, $this->object, $value);
-        $store = new Store($this->mock_db);
+
+        $store = new RDBMSStore($this->mock_db);
         $perm = new Perm($this->subject, $this->object, [$value]);
         $perm->remove($value);
 
@@ -383,7 +386,8 @@ class StoreTest extends UnitTest
         $table = 'perm';
         $this->givenAMockDb();
         $this->whenDbExpectsInsert($table, $this->subject, $this->object, $value);
-        $store = new Store($this->mock_db);
+
+        $store = new RDBMSStore($this->mock_db);
         $perm = new Perm($this->subject, $this->object, ['other']);
         $perm->add($value);
 
