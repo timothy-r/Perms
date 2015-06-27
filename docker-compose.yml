@@ -1,0 +1,4 @@
+perms:
+  build: .
+  ports:
+    - "49500:80"
