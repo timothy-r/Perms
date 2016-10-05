@@ -21,7 +21,7 @@ PUT /role/{name}/object/{id}/{perm}
 
 Sets the *admin* perm for *role 'article-admin'* on *article 99*
 
-`curl -X PUT http://perms-store.net/role/article-admin/object/article:99/admin`
+`curl -X PUT http://perms.api/role/article-admin/object/article:99/admin`
 
 Response:
 * 200 or 201 for success
@@ -32,7 +32,7 @@ HEAD /role/{name}/object/{id}/{perm}
 
 Test if *role user* may *read* *article 99*
 
-`curl -X HEAD http://perms-store.net/role/user/object/article:99/read`
+`curl -X HEAD http://perms.api/role/user/object/article:99/read`
 
 Response:
 * 200 if perm exists
@@ -44,7 +44,7 @@ GET /role/{name}/object/{id}/{perm}
 
 Test if *user 1* may *read* *article 99*
 
-`curl -X GET http://perms-store.net/role/user/object/article:99/read`
+`curl -X GET http://perms.api/role/user/object/article:99/read`
 
 Response:
 * 200 and {"role":"user","object":"article:99"}
@@ -56,7 +56,7 @@ GET /role/{name}/object/{id}
 
 Get all the perms *user 1* has on *article 99*
 
-`curl -X GET http://perms-store.net/role/user/object/article:99`
+`curl -X GET http://perms.api/role/user/object/article:99`
 
 Response:
 * 200 and {"perms":["read"],"role":"user","object":"article:99"} for success
@@ -68,7 +68,7 @@ DELETE /role/{name}/object/{id}/{perm}
 
 Removes *write* perms from *user 1* on *article 99*
 
-`curl -X DELETE http://perms-store.net/role/user/object/article:99/write`
+`curl -X DELETE http://perms.api/role/user/object/article:99/write`
 
 Response:
 * 200 if successfully removed, ie. the perm is no longer set
@@ -79,7 +79,7 @@ DELETE /role/{name}/object/{id}
 
 Removes all perms from *user 1* on *article 99*
 
-`curl -X DELETE http://perms-store.net/role/user/object/article:99`
+`curl -X DELETE http://perms.api/role/user/object/article:99`
 
 Response:
 * 200 if successfully removed, ie. there are no perms set for this pair any longer
@@ -90,7 +90,7 @@ GET /role/{name}
 
 Get a json object containing all the *objects* and their associated perms for *user 1*
 
-`curl -X GET http://perm-store.net/role/user`
+`curl -X GET http://perms.api/role/user`
 
 Response:
 * 200 and [{"perms":["read"],"role":"user","object":"article:99"},{"perms":["write"],"role":"user","object":"article:49"}]
@@ -101,7 +101,7 @@ GET /role/(name}/{perm}
 
 Get a json object containing all the *objects* with admin perm for *user*
 
-`curl -X GET http://perm-store.net/role/user/admin`
+`curl -X GET http://perms.api/role/user/admin`
 
 Response:
 * 200 and [{"role":"user","object":"article:49"}]
@@ -112,7 +112,7 @@ GET /object/{name}
 
 Get a json object containing all the *roles* and their associated perms for *article:99*
 
-`curl -X GET http://perm-store.net/object/article:99`
+`curl -X GET http://perms.api/object/article:99`
 
 Response:
 * 200 and [{"perms":["read"],"object":"article:99","role":"user"}]
@@ -123,7 +123,7 @@ GET /object/{name}/{perm}
 
 Get a json object containing all the *roles* with write perm for *article:99*
 
-`curl -X GET http://perm-store.net/object/article:99/write`
+`curl -X GET http://perms.api/object/article:99/write`
 
 Response:
 * 200 and [{"object":"article:99","role":"user"}]
@@ -145,7 +145,7 @@ Missing functionality
 
 Since the store treats the role and object identifiers as opaque strings we can't obtain all the objects of type article which a role has read permission on. Clients will need to retrieve all objects that a role has the read perm on and then filter out ones that are not articles, since only the clients know what the identifers represent. If, for example, all article identifiers contain the string 'article' then we could add a filter interface to do this on the server not the client.
 
-`curl -X GET http://perm-store.net/role/user/view?object=article`
+`curl -X GET http://perms.api/role/user/view?object=article`
 
 In the store service it could use the object query parameter as a wild card match on the object identifier string.
 
@@ -169,4 +169,3 @@ Implementing these endpoints will require the perms store to purge an external c
 * GET /role/(name}/{perm} 
 * GET /object/{id} 
 * GET /object/{id}/{perm} 
-
