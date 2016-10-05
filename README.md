@@ -3,11 +3,11 @@ Permissions store
 
 [![Build Status](https://travis-ci.org/timothy-r/Perms.png?branch=master)](https://travis-ci.org/timothy-r/Perms)
 
-A permissions store service which stores permissions, eg. read, write, admin for role and object pairs. 
+A permissions service API which stores/supplies permissions related to roles and objects.
 
 Glossary:
 * **Role** eg. the name of the role with this permission
-* **Object** eg. a bug tracker issue or article, the identifiers are opaque to the store and need to be unique across all its clients
+* **Object** eg. a file or article, the identifiers are opaque to the store and need to be unique across all its clients
 * **Perm** is a string, eg. *read* or *write*, the perm store simply stores these values, the clients give them meaning
 
 *In the uri examples the id parameters contain identifiers, role and object are literals.*
