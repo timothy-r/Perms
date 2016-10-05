@@ -44,10 +44,10 @@ GET /role/{name}/object/{id}/{perm}
 
 Test if *user 1* may *read* *article 99*
 
-`curl -X GET http://perms-store.net/role/user:1/object/article:99/read`
+`curl -X GET http://perms-store.net/role/user/object/article:99/read`
 
 Response:
-* 200 and {"role":"user:1","object":"article:99"}
+* 200 and {"role":"user","object":"article:99"}
 * 404 if perm does not exist
 
 Retrieve all 
@@ -56,10 +56,10 @@ GET /role/{name}/object/{id}
 
 Get all the perms *user 1* has on *article 99*
 
-`curl -X GET http://perms-store.net/role/user:1/object/article:99`
+`curl -X GET http://perms-store.net/role/user/object/article:99`
 
 Response:
-* 200 and {"perms":["read"],"role":"user:1","object":"article:99"} for success
+* 200 and {"perms":["read"],"role":"user","object":"article:99"} for success
 * 404 when no perms exist
 
 Remove 
@@ -68,7 +68,7 @@ DELETE /role/{name}/object/{id}/{perm}
 
 Removes *write* perms from *user 1* on *article 99*
 
-`curl -X DELETE http://perms-store.net/role/user:1/object/article:99/write`
+`curl -X DELETE http://perms-store.net/role/user/object/article:99/write`
 
 Response:
 * 200 if successfully removed, ie. the perm is no longer set
@@ -79,7 +79,7 @@ DELETE /role/{name}/object/{id}
 
 Removes all perms from *user 1* on *article 99*
 
-`curl -X DELETE http://perms-store.net/role/user:1/object/article:99`
+`curl -X DELETE http://perms-store.net/role/user/object/article:99`
 
 Response:
 * 200 if successfully removed, ie. there are no perms set for this pair any longer
@@ -90,21 +90,21 @@ GET /role/{name}
 
 Get a json object containing all the *objects* and their associated perms for *user 1*
 
-`curl -X GET http://perm-store.net/role/user:1`
+`curl -X GET http://perm-store.net/role/user`
 
 Response:
-* 200 and [{"perms":["read"],"role":"user:1","object":"article:99"},{"perms":["write"],"role":"user:1","object":"article:49"}]
+* 200 and [{"perms":["read"],"role":"user","object":"article:99"},{"perms":["write"],"role":"user","object":"article:49"}]
 
 Retrieve all for role with perm
 ---------------------------------
 GET /role/(name}/{perm} 
 
-Get a json object containing all the *objects* with admin perm for *user:1*
+Get a json object containing all the *objects* with admin perm for *user*
 
-`curl -X GET http://perm-store.net/role/user:1/admin`
+`curl -X GET http://perm-store.net/role/user/admin`
 
 Response:
-* 200 and [{"role":"user:1","object":"article:49"}]
+* 200 and [{"role":"user","object":"article:49"}]
 
 Retrieve all for object
 -----------------------
@@ -115,7 +115,7 @@ Get a json object containing all the *roles* and their associated perms for *art
 `curl -X GET http://perm-store.net/object/article:99`
 
 Response:
-* 200 and [{"perms":["read"],"object":"article:99","role":"user:1"}]
+* 200 and [{"perms":["read"],"object":"article:99","role":"user"}]
 
 Retrieve all for object with perm
 ---------------------------------
@@ -126,7 +126,7 @@ Get a json object containing all the *roles* with write perm for *article:99*
 `curl -X GET http://perm-store.net/object/article:99/write`
 
 Response:
-* 200 and [{"object":"article:99","role":"user:1"}]
+* 200 and [{"object":"article:99","role":"user"}]
 
 Discussion
 ==========
@@ -145,7 +145,7 @@ Missing functionality
 
 Since the store treats the role and object identifiers as opaque strings we can't obtain all the objects of type article which a role has read permission on. Clients will need to retrieve all objects that a role has the read perm on and then filter out ones that are not articles, since only the clients know what the identifers represent. If, for example, all article identifiers contain the string 'article' then we could add a filter interface to do this on the server not the client.
 
-`curl -X GET http://perm-store.net/role/user:1/view?object=article`
+`curl -X GET http://perm-store.net/role/user/view?object=article`
 
 In the store service it could use the object query parameter as a wild card match on the object identifier string.
 
