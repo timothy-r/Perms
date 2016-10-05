@@ -6,9 +6,9 @@ Permissions store
 A permissions store service which stores permissions, eg. read, write, admin for subject and object pairs. 
 
 Glossary:
-* **Subject** eg. a User or UserGroup, the identifiers are opaque to the store and need to be unique across all its clients
-* **Object** eg. a bug tracker issue or article, again the identifiers are opaque to the store and need to be unique across all its clients
-* **Perm** is a string, eg. *read* or *write*, the perm store simply stores these values, the clients give them meaning
+* **Subject** eg. a User identifier
+* **Object** eg. an article id
+* **Perm** is an activity, eg. *read* or *write*, the perm store simply stores these values, the clients give them meaning
 
 *In the uri examples the id parameters contain identifiers, subject and object are literals.*
 
