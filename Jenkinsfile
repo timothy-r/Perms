@@ -1,18 +1,18 @@
 node {
    
    stage('Install tools') {
-        wget https://getcomposer.org/download/1.6.3/composer.phar
-        chmod +x composer.phar
+        sh "wget https://getcomposer.org/download/1.6.3/composer.phar"
+        sh "chmod +x composer.phar"
    }
 
    stage('Install PHP dependencies') {
-        cd src
-        ../composer.phar install:w
+        sh "cd src"
+        sh "../composer.phar install"
    }
 
    stage('Initialise db') {
-       cd ../build
-       ./db-init.sh
+       sh "cd ../build"
+       sh "./db-init.sh"
    }
 
    stage('Run tests') {
