@@ -19,7 +19,7 @@ Set
 ---
 PUT /subject/{$id}/object/{$id}/{$perm} 
 
-Sets the *admin* perm for *user 1* on *article 99*
+Sets the *admin* perm for *user:1* on *article:99*
 
 `curl -X PUT http://perms-store.net/subject/user:1/object/article:99/admin`
 
