@@ -30,7 +30,7 @@ Test
 ----
 HEAD /subject/{$id}/object/{$id}/{$perm} 
 
-Test if *user 1* may *read* *article 99*
+Test if *user 1* may *read* *article:99*
 
 `curl -X HEAD http://perms-store.net/subject/user:1/object/article:99/read`
 
