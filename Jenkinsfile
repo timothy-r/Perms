@@ -6,13 +6,11 @@ node {
    }
 
    stage('Install PHP dependencies') {
-        sh "cd src"
-        sh "../composer.phar install"
+        sh "cd src; ../composer.phar install"
    }
 
    stage('Initialise db') {
-       sh "cd ../build"
-       sh "./db-init.sh"
+       sh "cd build; ./db-init.sh"
    }
 
    stage('Run tests') {
