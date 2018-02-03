@@ -4,7 +4,7 @@ node {
       // run the build script 
       sh "./build.sh"
    }
-   stage('test') {
+   stage('Test') {
       // Run php unit tests
       if (isUnix()) {
          sh "./src/vendor/bin/phpunit -c phpunit.xml tests/unit/"
